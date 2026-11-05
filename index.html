@@ -54,6 +54,7 @@
     </header>
     <div class="subbar">
       <div class="pills" id="pills"></div>
+      <div class="lenses" id="lenses"></div>
       <div class="demo-note">לוח דמה לסדנה · <a href="#" data-open="about">מה זה?</a></div>
     </div>
     <main class="panes">
@@ -62,10 +63,12 @@
           <div class="lh-title">משרות במחוז תל אביב</div>
           <div class="muted small"><span id="count">0</span> תוצאות · ממוין לפי "רלוונטיות" (אין לנו מושג מה זה אומר)</div>
         </div>
+        <div class="insights" id="insights"></div>
         <ul class="list" id="list"></ul>
       </section>
       <section class="detail-pane" id="detail"></section>
     </main>
+    <div class="tray" id="tray" hidden></div>
   </div>
 </div>
 
@@ -122,6 +125,13 @@
   </div>
 </div></div>
 
+<!-- COMPARE -->
+<div class="modal" id="compare" hidden><div class="sheet sheet-cmp">
+  <button class="icon-btn close" data-close aria-label="סגירה">×</button>
+  <div class="cmp-top"><h2>השוואת מודעות</h2><div class="lenses" id="cmp-lenses"></div></div>
+  <div class="cmp-body" id="cmp-body"></div>
+</div></div>
+
 <!-- FINAL -->
 <div class="modal" id="final" hidden><div class="sheet">
   <button class="icon-btn close" data-close aria-label="סגירה">×</button>
@@ -148,6 +158,7 @@
   <button class="btn-primary" data-close>חזרה לחיפוש</button>
 </div></div>
 
+<div class="coach" id="coach" hidden><div class="coach-hole" id="coach-hole"></div><div class="coach-b" id="coach-b"></div></div>
 <div class="toast" id="toast" hidden></div>
 <script src="config.js"></script>
 <script src="data.js"></script>

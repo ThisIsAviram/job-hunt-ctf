@@ -36,7 +36,8 @@
       const { error } = await sb.rpc("join_event", { p_code: c, p_full_name: full, p_nickname: nick }); if (error) throw error;
       code = c; store.set("code", c); store.set("nick", nick);
       const ev = await fetchEvent(c); applyEvent(ev);
-      if (ev.status === "live") BU.startGame(); else waitLive();
+      $("#intro").hidden = true; store.set("intro", 1);
+      BU.tutorial(() => { if (status === "live") BU.startGame(); else { $("#intro").hidden = false; waitLive(); } });
     } catch (e) { err(/not open/.test(e.message) ? "האירוע לא פתוח. בדקו את הקוד מול המנחה." : "לא הצלחנו להתחבר: " + e.message); }
     finally { $("#join-go").disabled = false; }
   };

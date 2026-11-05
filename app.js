@@ -9,7 +9,7 @@
   };
   const P = new URLSearchParams(location.search);
   const S = {
-    role: "all", level: "all", q: "", sel: null, active: store.get("active", null),
+    role: "all", level: "all", q: "", sel: null, active: store.get("active", null), lens: store.get("lens", {}), cmp: [],
     reveal: P.get("m") === "bu2030",
     marks: store.get("marks", {}),          // missionId -> [jobIds]
     best: store.get("best", {}),            // missionId -> points
@@ -24,7 +24,23 @@
   const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   async function sha(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, "0")).join(""); }
   const H = {}; // missionId -> {jobId: hash16}
-  async function prepHashes() { for (const c of CH) { if (c.type !== "mark") continue; H[c.id] = {}; for (const j of JOBS) H[c.id][j.id] = (await sha(`${SALT}:${c.id}:${j.id}`)).slice(0, 16); } }
+  async function prepHashes() { WARM.targets = [(await sha(`${SALT}:warm:d2`)).slice(0, 16)]; H.warm = {}; for (const j of JOBS) H.warm[j.id] = (await sha(`${SALT}:warm:${j.id}`)).slice(0, 16); for (const c of CH) { if (c.type !== "mark") continue; H[c.id] = {}; for (const j of JOBS) H[c.id][j.id] = (await sha(`${SALT}:${c.id}:${j.id}`)).slice(0, 16); } }
+  const LENS = {
+    n: /(\$?\d[\d,.]*\s*(?:\+|–|-)?\s*(?:\d+\s*)?(?:years?|yrs|%|k\b|m\b|million|tb|users|students)?)/gi,
+    v: /\b(build|built|builds|building|own|owns|owning|ship|ships|shipped|shipping|lead|leads|prototyp\w*|design|designs|deploy\w*|automat\w*|scale|scaling|drive|define|launch\w*|iterate\w*|experiment\w*|review\w*|test\w*)\b/gi
+  };
+  function fmt(text, j) {
+    const t = String(text == null ? "" : text), R = [];
+    const add = (re, cls) => { re.lastIndex = 0; let m; while ((m = re.exec(t))) { if (!m[0].trim()) { re.lastIndex++; continue; } R.push([m.index, m.index + m[0].length, cls]); } };
+    if (S.lens.n) add(new RegExp(LENS.n.source, "gi"), "ln-n");
+    if (S.lens.t && j && j.tools) j.tools.forEach(k => { if (k.length > 1) add(new RegExp(k.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "ln-t"); });
+    if (S.lens.v) add(new RegExp(LENS.v.source, "gi"), "ln-v");
+    if (S.q) add(new RegExp(S.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "ln-q");
+    R.sort((a, b) => a[0] - b[0] || b[1] - a[1]);
+    let out = "", pos = 0;
+    for (const [a, b, c] of R) { if (a < pos) continue; out += esc(t.slice(pos, a)) + `<span class="${c}">${esc(t.slice(a, b))}</span>`; pos = b; }
+    return out + esc(t.slice(pos));
+  }
   function hl(t) { const e = esc(t); if (!S.q) return e; const q = S.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); return e.replace(new RegExp(q, "ig"), m => `<mark>${m}</mark>`); }
   const hay = j => [j.title, j.company, j.summary, ...(j.responsibilities || []), ...(j.requirements || []), ...(j.tools || [])].join(" ").toLowerCase();
   const PALETTE = ["#1F2A5C", "#0A66C2", "#057642", "#B4472B", "#6B3FA0", "#0F6E8C", "#9C2F5A", "#3D5A80", "#7A5C00", "#2F6B3A"];
@@ -55,7 +71,8 @@
     bulb: '<svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2zM9 19h6v2H9z"/></svg>',
     check: '<svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.4z"/></svg>'
   };
-  const mission = () => CH.find(c => c.id === S.active);
+  const WARM = { id: "warm", type: "mark", title: "חימום", short: "חימום", pts: 0, need: 1, targets: [], neutral: [], prompt: "משימת אימון: מצאו את המודעה של Lusha וסמנו אותה.", why: "ככה זה עובד. עכשיו בשביל נקודות.", hint: "" };
+  const mission = () => S.active === "warm" ? WARM : CH.find(c => c.id === S.active);
   const CAT = { time: "TIME", years: "XP", proto: "PRODUCT", builder: "ROLES", mcp: "TOOLS", spam: "NOISE", degree: "EDU", junior: "ENTRY", cv: "BOSS" };
   const marksOf = id => S.marks[id] || [];
   const totalPts = CH.reduce((a, c) => a + c.pts, 0);
@@ -79,7 +96,7 @@
   const filtered = () => JOBS.filter(j => (S.role === "all" || j.role_type === S.role) && (S.level === "all" || j.seniority === S.level) && (!S.q || hay(j).includes(S.q.toLowerCase())));
   function renderList() {
     const list = filtered(), m = mission(), mk = m ? marksOf(m.id) : [];
-    $("#count").textContent = list.length;
+    $("#count").textContent = list.length; renderInsights(list);
     if (!list.find(j => j.id === S.sel)) S.sel = list[0] ? list[0].id : null;
     $("#list").innerHTML = list.map(j => `
       <li class="card ${j.id === S.sel ? "sel" : ""} ${mk.includes(j.id) ? "marked" : ""}" data-id="${j.id}">
@@ -88,6 +105,7 @@
           <div class="c-title">${hl(j.title)}${yearTag(j)}</div>
           <div class="c-co">${esc(j.company)}</div>
           <div class="c-loc">${esc(j.city || "Tel Aviv")}</div>
+          <div class="c-chips">${(j.tools || []).slice(0, 3).map(t => `<span class="c-chip">${esc(t)}</span>`).join("")}</div>
           <div class="c-meta">${j.era === "spam" ? '<span class="hot">🔥 Hiring fast</span>' : `<span>${esc(LEVEL_EN[j.seniority] || "")}</span>`}<span>·</span><span>${posted(j)}</span></div>
         </div>
       </li>`).join("") || `<li class="empty">אין משרות שמתאימות לסינון. גם זה קורה בשוק האמיתי.</li>`;
@@ -97,9 +115,10 @@
     const j = JOBS.find(x => x.id === S.sel), el = $("#detail");
     if (!j) { el.innerHTML = `<div class="d-empty">בחרו משרה מהרשימה</div>`; return; }
     const m = mission(), canMark = m && m.type === "mark", on = canMark && marksOf(m.id).includes(j.id);
-    const li = a => (a || []).map(x => `<li>${hl(x)}</li>`).join("");
+    const li = a => (a || []).map(x => `<li>${fmt(x, j)}</li>`).join("");
+    const inCmp = S.cmp.includes(j.id);
     el.innerHTML = `
-      <div class="d-cover" style="--c:${tint(j.company)}"></div>
+      <div class="d-cover" style="--c:${tint(j.company)};--a:${[...j.company].reduce((a, c) => a + c.charCodeAt(0), 0) % 160 + 10}deg"></div>
       <div class="d-top">
         <div class="d-head">${logo(j, "logo-lg")}<div><div class="d-co-name">${esc(j.company)}</div><div class="muted en small">${esc(ROLE_EN[j.role_type] || "")}</div></div></div>
         <h1 class="d-title">${esc(j.title)}${yearTag(j)}</h1>
@@ -111,18 +130,46 @@
         </div>
         <div class="d-actions">
           <button class="btn-mark ${on ? "on" : ""}" data-mark="${j.id}" ${canMark ? "" : "disabled title='בחרו קודם משימה בפאנל'"}>${on ? "🚩 מסומנת למשימה" : "🚩 סימון למשימה"}</button>
+          <button class="btn-outline ${inCmp ? "on" : ""}" data-cmp="${j.id}">${inCmp ? "✓ בהשוואה" : "⇄ השוואה"}</button>
           <button class="btn-primary" data-open="apply">${I.check} Easy Apply</button>
         </div>
       </div>
       <div class="d-section"><h3>על המשרה</h3>
-        <div class="d-ad"><p class="lead">${hl(j.summary || "")}</p>
+        <div class="d-ad"><p class="lead">${fmt(j.summary || "", j)}</p>
           <h4>What you'll do</h4><ul>${li(j.responsibilities)}</ul>
           <h4>What we're looking for</h4><ul>${li(j.requirements)}</ul></div></div>
       ${j.tools && j.tools.length ? `<div class="d-section"><h3>כישורים</h3><div class="skills">${j.tools.map(t => `<span class="skill">${hl(t)}</span>`).join("")}</div></div>` : ""}
       <div class="d-section d-about"><h3>על החברה</h3>
         <div class="d-co">${logo(j, "logo-sm")}<div><div class="d-co-name">${esc(j.company)}</div><div class="muted small">${esc(j.city || "Tel Aviv")}</div></div></div>
         <p class="src">מזהה מודעה: <span class="en">${esc(j.id.toUpperCase())}</span>${S.reveal ? (j.source_url ? ` · <a href="${esc(j.source_url)}" target="_blank" rel="noopener">מקור</a>` : " · רעש שנכתב לסדנה") : ""}</p></div>`;
-    el.scrollTop = 0;
+    el.scrollTop = 0; el.classList.remove("fade"); void el.offsetWidth; el.classList.add("fade");
+  }
+  function renderInsights(list) {
+    const cnt = {}; list.forEach(j => (j.tools || []).forEach(t => { const k = t.trim(); cnt[k] = (cnt[k] || 0) + 1; }));
+    const top = Object.entries(cnt).sort((a, b) => b[1] - a[1]).slice(0, 7), max = top.length ? top[0][1] : 1;
+    $("#insights").innerHTML = top.length ? `<span class="ins-label">כישורים חמים בתוצאות</span>` + top.map(([k, v]) =>
+      `<button class="ins" data-q="${esc(k)}" title="${v} מודעות"><span class="en">${esc(k)}</span><i style="width:${Math.round(100 * v / max)}%"></i></button>`).join("") : "";
+  }
+  function renderLenses() {
+    const L = [["n", "🔢 מספרים"], ["t", "🛠 כלים"], ["v", "✍️ פעלים"]];
+    $("#lenses").innerHTML = `<span class="lens-label">עדשות</span>` + L.map(([k, v]) => `<button class="lens lens-${k} ${S.lens[k] ? "on" : ""}" data-lens="${k}">${v}</button>`).join("");
+  }
+  function renderTray() {
+    const el = $("#tray");
+    el.hidden = !S.cmp.length;
+    el.innerHTML = `<span class="tray-label">⇄ השוואה</span>` + S.cmp.map(id => { const j = JOBS.find(x => x.id === id);
+      return `<span class="tray-item">${logo(j, "logo-xs")}<span class="en">${esc(j.company)}</span><button data-uncmp="${id}" aria-label="הסרה">×</button></span>`; }).join("") +
+      (S.cmp.length < 2 ? `<span class="muted small">בחרו עוד מודעה אחת</span>` : `<button class="btn-primary btn-sm" data-open-cmp>השוו ▸</button>`);
+  }
+  function openCompare() {
+    const [a, b] = S.cmp.map(id => JOBS.find(x => x.id === id));
+    const col = j => `<div class="cmp-col"><div class="cmp-head">${logo(j)}<div><div class="d-co-name en">${esc(j.title)}</div><div class="muted en small">${esc(j.company)}</div></div></div>
+      <div class="d-ad"><p class="lead">${fmt(j.summary, j)}</p><h4>What you'll do</h4><ul>${(j.responsibilities || []).map(x => `<li>${fmt(x, j)}</li>`).join("")}</ul>
+      <h4>What we're looking for</h4><ul>${(j.requirements || []).map(x => `<li>${fmt(x, j)}</li>`).join("")}</ul></div>
+      <div class="cmp-stats"><span><b>${(j.requirements || []).length}</b> דרישות</span><span><b>${(j.tools || []).length}</b> כלים</span><span><b>${(j.summary + (j.requirements || []).join(" ") + (j.responsibilities || []).join(" ")).split(/\s+/).length}</b> מילים</span></div></div>`;
+    $("#cmp-body").innerHTML = col(a) + col(b);
+    $("#cmp-lenses").innerHTML = $("#lenses").innerHTML;
+    $("#compare").hidden = false;
   }
 
   /* ---------- game panel ---------- */
@@ -171,6 +218,7 @@
     const correct = mk.filter(id => c.targets.includes(hs[id])).length;
     const wrong = mk.filter(id => !c.targets.includes(hs[id]) && !c.neutral.includes(hs[id])).length;
     const got = Math.min(correct, c.need), pts = Math.max(0, Math.round(c.pts * (got - wrong) / c.need));
+    if (c.id === "warm") { S.res.warm = { pts: 0, msg: got ? "🚩 מושלם. ככה בודקים. במשימות אמיתיות יש ניקוד חלקי, וטעות מורידה נקודות." : "לא זו. חפשו Lusha." }; renderActive(); return; }
     const msg = pts >= c.pts ? `🚩 מושלם! ${got}/${c.need} · ${pts} נק׳` :
       `${got} מתוך ${c.need} נכונות${wrong ? ` · ${wrong} סימונים שגויים מורידים נקודות` : ""} · ${pts} נק׳` + (got < c.need ? " · משהו עוד מסתתר בלוח" : "");
     S.res[c.id] = { pts, msg }; store.set("res", S.res);
@@ -253,6 +301,59 @@
     sync({ ats: r.score });
   }
 
+  /* ---------- tutorial (coach marks) ---------- */
+  const TUT = [
+    { sel: ".game", t: "זה הצד שלכם", b: "9 משימות, שעון, ניקוד ואורות. כל משימה מבקשת למצוא מודעות בלוח. בואו נעשה סיבוב אימון אחד." },
+    { sel: "#active", t: "משימת חימום", b: "פתחנו לכם משימת אימון בלי ניקוד: למצוא את המודעה של Lusha.", on: () => { S.active = "warm"; renderGame(); } },
+    { sel: ".nav-search", t: "חיפוש", b: "הקלידו <b>Lusha</b> בחיפוש.", wait: () => /lusha/i.test(S.q) },
+    { sel: () => $('.card[data-id="d2"]'), t: "פותחים מודעה", b: "לחצו על המודעה כדי לקרוא אותה.", wait: () => S.sel === "d2" },
+    { sel: "#lenses", t: "עדשות", b: "העדשות צובעות מספרים, כלים ופעלים בתוך המודעה. הדליקו אחת ותראו מה קופץ.", wait: () => S.lens.n || S.lens.t || S.lens.v },
+    { sel: '[data-mark="d2"]', t: "מסמנים 🚩", b: "לחצו <b>סימון למשימה</b>.", wait: () => marksOf("warm").includes("d2") },
+    { sel: '[data-check="warm"]', t: "בודקים", b: "לחצו <b>בדיקה</b>. ניקוד מלא, חלקי, או מינוס על טעויות.", wait: () => !!S.res.warm },
+    { sel: '[data-cmp="d2"]', t: "השוואה", b: "רוצים לראות איך שתי מודעות כתובות? <b>⇄ השוואה</b> על שתיים, ושמים אותן זו ליד זו." },
+    { sel: "#lights", t: "שני אורות", b: "אחד עכשיו, אחד אחרי 10 דקות. אור מחשיך את הלוח ומאיר את מה שפספסתם במשימה הפעילה. 7 שניות. תשתמשו בחוכמה." },
+    { sel: "#timer", t: "20 דקות", b: "השעון מתחיל כשהמנחה לוחץ START (או כשאתם לוחצים כאן למטה). מוכנים?", last: true }
+  ];
+  let tut = null;
+  function tutorial(done) {
+    if (store.get("tutDone", null)) { done(); return; }
+    tut = { i: 0, done }; $("#coach").hidden = false; tutStep();
+  }
+  BU.tutorial = tutorial;
+  function tutTarget(st) { return typeof st.sel === "function" ? st.sel() : $(st.sel); }
+  function tutStep() {
+    const st = TUT[tut.i]; if (st.on && !st._ran) { st._ran = 1; st.on(); }
+    const el = tutTarget(st); if (el && el.scrollIntoView) el.scrollIntoView({ block: "nearest" });
+    $("#coach-b").innerHTML = `<div class="cb-step">${String(tut.i + 1).padStart(2, "0")} / ${String(TUT.length).padStart(2, "0")}</div><h3>${st.t}</h3><p>${st.b}</p>
+      <div class="cb-actions">${st.wait ? `<span class="cb-wait">${st.wait() ? "✓ יופי" : "▸ עשו את זה עכשיו"}</span>` : ""}
+      <button class="cb-next" ${st.wait && !st.wait() ? "disabled" : ""}>${st.last ? "יאללה, למשחק ▸" : "הבא ▸"}</button></div>
+      <button class="cb-skip">דלגו, אנחנו מקצוענים</button>`;
+    tutPlace();
+  }
+  function tutPlace() {
+    if (!tut) return; const st = TUT[tut.i], el = tutTarget(st), hole = $("#coach-hole"), b = $("#coach-b");
+    if (!el) { hole.style.cssText = "opacity:0"; return; }
+    const r = el.getBoundingClientRect(), p = 6;
+    hole.style.cssText = `top:${r.top - p}px;left:${r.left - p}px;width:${r.width + 2 * p}px;height:${r.height + 2 * p}px`;
+    const bw = 320, bh = b.offsetHeight || 180;
+    let top = r.bottom + 14, left = Math.min(innerWidth - bw - 12, Math.max(12, r.left + r.width / 2 - bw / 2));
+    if (top + bh > innerHeight - 12) top = Math.max(12, r.top - bh - 14);
+    if (r.height > innerHeight * .6) { top = Math.max(12, r.top + 40); left = r.left > innerWidth / 2 ? r.left - bw - 16 : r.right + 16; }
+    b.style.top = top + "px"; b.style.left = left + "px";
+  }
+  function tutEnd() {
+    $("#coach").hidden = true; const d = tut.done; tut = null; store.set("tutDone", 1);
+    delete S.marks.warm; delete S.res.warm; store.set("marks", S.marks); store.set("res", S.res);
+    S.active = null; S.q = ""; $("#q").value = ""; S.lens = {}; store.set("lens", S.lens); renderLenses(); renderList(); renderGame(); d();
+  }
+  setInterval(() => { if (!tut) return; const st = TUT[tut.i]; const btn = $(".cb-next"); if (st.wait && btn) { const ok = st.wait(); btn.disabled = !ok; const w = $(".cb-wait"); if (w) { w.textContent = ok ? "✓ יופי" : "▸ עשו את זה עכשיו"; w.classList.toggle("ok", ok); } if (ok && !st._auto) { st._auto = 1; setTimeout(() => { if (tut && TUT[tut.i] === st) { tut.i++; tutStep(); } }, 700); } } tutPlace(); }, 250);
+  addEventListener("resize", tutPlace);
+  document.addEventListener("click", e => {
+    if (!tut) return;
+    if (e.target.closest(".cb-skip")) { tutEnd(); return; }
+    if (e.target.closest(".cb-next")) { if (TUT[tut.i].last) tutEnd(); else { tut.i++; tutStep(); } }
+  }, true);
+
   /* ---------- intro / join ---------- */
   function startGame() {
     if (!S.start) { S.start = Date.now(); store.set("start", S.start); }
@@ -272,16 +373,21 @@
     const mm = t.closest("[data-mark]");
     if (mm) { const c = mission(); if (!c || c.type !== "mark") return; const id = mm.dataset.mark, m = marksOf(c.id);
       S.marks[c.id] = m.includes(id) ? m.filter(x => x !== id) : [...m, id]; store.set("marks", S.marks); renderList(); renderActive(); syncSoon(); return; }
+    const ln = t.closest("[data-lens]"); if (ln) { S.lens[ln.dataset.lens] = !S.lens[ln.dataset.lens]; store.set("lens", S.lens); renderLenses(); renderDetail(); if (!$("#compare").hidden) openCompare(); return; }
+    const iq = t.closest("[data-q]"); if (iq) { S.q = iq.dataset.q; $("#q").value = S.q; renderList(); return; }
+    const cm = t.closest("[data-cmp]"); if (cm) { const id = cm.dataset.cmp; S.cmp = S.cmp.includes(id) ? S.cmp.filter(x => x !== id) : [...S.cmp, id].slice(-2); renderTray(); renderDetail(); if (S.cmp.length === 2 && !S.cmp.includes(undefined)) toast("⇄ שתי מודעות בהשוואה. לחצו 'השוו' למטה."); return; }
+    const uc = t.closest("[data-uncmp]"); if (uc) { S.cmp = S.cmp.filter(x => x !== uc.dataset.uncmp); renderTray(); renderDetail(); return; }
+    if (t.closest("[data-open-cmp]")) { openCompare(); return; }
     const ms = t.closest("[data-mission]"); if (ms) { S.active = ms.dataset.mission; store.set("active", S.active); renderGame(); renderList(); return; }
     const pr = t.closest("[data-role]"); if (pr) { S.role = pr.dataset.role; pills(); renderList(); return; }
     const pl = t.closest("[data-level]"); if (pl) { S.level = pl.dataset.level; pills(); renderList(); return; }
-    const ck = t.closest("[data-check]"); if (ck) { checkMission(CH.find(c => c.id === ck.dataset.check)); return; }
+    const ck = t.closest("[data-check]"); if (ck) { checkMission(ck.dataset.check === "warm" ? WARM : CH.find(c => c.id === ck.dataset.check)); return; }
     const lg = t.closest("[data-light]"); if (lg) { useLight(CH.find(c => c.id === lg.dataset.light)); return; }
     const op = t.closest("[data-open]"); if (op) { e.preventDefault(); $("#" + op.dataset.open).hidden = false; return; }
     if (t.closest("[data-open-cv]")) { openCV(); return; }
     if (t.closest("#cv-run")) { runATS(); return; }
     if (t.closest("#cv-reset")) { $("#cv-text").value = CV_TPL; return; }
-    if (t.closest("[data-start]")) { if (BU.beforeStart) BU.beforeStart(); else startGame(); return; }
+    if (t.closest("[data-start]")) { if (BU.beforeStart) BU.beforeStart(); else { $("#intro").hidden = true; store.set("intro", 1); tutorial(startGame); } return; }
     if (t.closest("#how-btn")) { $("#intro").hidden = false; return; }
     if (t.closest("#final-btn")) { $("#final-title").textContent = FINAL.title; $("#final-prompt").textContent = FINAL.prompt; $("#final-text").value = store.get("final", ""); $("#final").hidden = false; return; }
     if (t.closest("#reset")) { const b = $("#reset"); if (!b.dataset.armed) { b.dataset.armed = 1; b.textContent = "בטוח? לחצו שוב"; return; }
@@ -293,7 +399,7 @@
   let qT; $("#q").addEventListener("input", e => { S.q = e.target.value.trim(); renderList(); clearTimeout(qT); qT = setTimeout(() => { if (S.q) { S.searches++; store.set("searches", S.searches); syncSoon(); } }, 800); });
 
   prepHashes().then(() => {
-    pills(); renderList(); renderGame(); tick(); setInterval(tick, 1000);
+    pills(); renderLenses(); renderList(); renderTray(); renderGame(); tick(); setInterval(tick, 1000);
     if (!store.get("intro", null)) $("#intro").hidden = false;
     if (BU.ready) BU.ready();
   });
