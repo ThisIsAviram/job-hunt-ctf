@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex">
 <link rel="icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=Rubik:wght@500;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,13 +20,13 @@
       <div><div class="g-title">ציד משרות <span>CTF</span></div><div class="g-event" id="g-event"></div></div>
     </div>
     <div class="g-stats">
-      <div class="stat"><small>זמן</small><b id="timer">20:00</b></div>
-      <div class="stat"><small>ניקוד</small><b><span id="score">0</span><em id="score-total">/100</em></b></div>
-      <div class="stat"><small>אורות</small><b id="lights">💡</b></div>
+      <div class="stat"><small>Time</small><b id="timer">20:00</b></div>
+      <div class="stat stat-score"><small>Score</small><b><span id="score">0</span><em id="score-total">/100</em></b></div>
+      <div class="stat"><small>Lights</small><div id="lights"></div></div>
     </div>
     <div class="g-bar"><i id="score-bar"></i></div>
 
-    <div class="g-label">בחרו משימה</div>
+    <div class="g-label"><span>Missions</span><span id="g-cap">0/9 captured</span></div>
     <div class="tiles" id="tiles"></div>
 
     <div class="active" id="active"></div>
@@ -71,27 +71,25 @@
 
 <!-- INTRO -->
 <div class="modal" id="intro" hidden><div class="sheet sheet-intro">
-  <img class="intro-logo" src="bu-logo.png" alt="BU">
-  <h1>ציד משרות · 20 דקות</h1>
-  <p class="lead">לפניכם לוח משרות של תל אביב. חלק מהמודעות מ-2019–2021, חלק מ-2026, ויש גם קצת רעש. התאריכים נמחקו.</p>
-  <ol class="rules">
-    <li><b>עובדים בזוגות.</b> מסך אחד, ראש אחד וחצי.</li>
-    <li><b>בוחרים משימה</b> בפאנל הימני. כל משימה מבקשת למצוא מודעות.</li>
-    <li><b>מסמנים מודעות</b> עם הכפתור <span class="kbd">🚩 סימון למשימה</span>, ואז לוחצים <span class="kbd">בדיקה</span>. אפשר לקבל ניקוד מלא או חלקי, וסימון שגוי מוריד נקודות.</li>
-    <li><b>שני אורות.</b> פעם ב-10 דקות נפתח "אור" שמאיר את מה שפספסתם במשימה הפעילה. תשתמשו בחוכמה.</li>
-    <li><b>המשימה האחרונה:</b> לכתוב קורות חיים לבוגרת שלנו שיעברו את ה-ATS של הלוח.</li>
-  </ol>
-  <p class="muted">טיפ: שימו לב לא רק למה שמבקשים, אלא גם לאיך כותבים, וכמה.</p>
+  <div class="lobby-top"><span class="lobby-kicker">BU JOB LAB · CTF · 20:00</span><img class="intro-logo" src="bu-logo.png" alt="BU"></div>
+  <h1>ציד <em>משרות</em>.</h1>
+  <p class="lead">לוח משרות של תל אביב. חלק מהמודעות מ-2019–2021, חלק מ-2026, ויש גם רעש. התאריכים נמחקו. יש לכם 20 דקות.</p>
+  <div class="rules-grid">
+    <div class="rule"><b>01</b><h4>בוחרים משימה</h4><p>9 משימות בפאנל. כל אחת מבקשת למצוא מודעות.</p></div>
+    <div class="rule"><b>02</b><h4>מסמנים 🚩</h4><p>פותחים מודעה, "סימון למשימה", ואז "בדיקה". ניקוד מלא או חלקי. טעות עולה נקודות.</p></div>
+    <div class="rule"><b>03</b><h4>שני אורות</h4><p>אחד עכשיו, אחד אחרי 10 דקות. מאיר את מה שפספסתם, ל-7 שניות.</p></div>
+    <div class="rule"><b>04</b><h4>הבוס האחרון</h4><p>קורות חיים לבוגרת שלנו שיעברו את ה-ATS של הלוח.</p></div>
+  </div>
   <div class="join" id="join-form">
     <div class="join-grid">
-      <label>קוד המשחק<input id="join-code" placeholder="051126BU" maxlength="8" autocomplete="off" class="en"></label>
+      <label>קוד משחק<input id="join-code" placeholder="051126BU" maxlength="8" autocomplete="off"></label>
       <label>שם מלא<input id="join-name" placeholder="ישראל ישראלי" maxlength="60"></label>
       <label>כינוי למסך הגדול<input id="join-nick" placeholder="Recruiter Slayer" maxlength="24"></label>
     </div>
     <div class="join-err" id="join-err" hidden></div>
   </div>
-  <div class="join-wait" id="join-wait" hidden>⏳ נכנסתם. ממתינים שהמנחה יפתח את המשחק…</div>
-  <button class="btn-primary btn-lg" data-start id="join-go">יאללה, מתחילים ⏱</button>
+  <div class="join-wait" id="join-wait" hidden>▸ נכנסתם. ממתינים שהמנחה ילחץ START…</div>
+  <div class="lobby-cta"><button class="btn-go" data-start id="join-go">מתחילים ▸</button><span class="muted">טיפ: לא רק מה מבקשים. גם איך כותבים, וכמה.</span></div>
 </div></div>
 
 <!-- CV LAB -->

@@ -43,6 +43,11 @@
   const posted = j => S.reveal ? esc(j.date) : "¯\\_(ツ)_/¯";
   const LEVEL_EN = { junior: "Entry level", mid: "Mid-Senior level", senior: "Senior level" };
   const ROLE_EN = { dev: "Engineering", pm: "Product Management", builder: "Builder", other: "Other" };
+  function capture(c, pts) {
+    const d = document.createElement("div"); d.className = "capture"; d.innerHTML = `<div>+${pts}<small>${c.title} · CAPTURED</small></div>`;
+    document.body.appendChild(d); setTimeout(() => d.remove(), 1500);
+  }
+  function bump() { const e = document.querySelector("#score"); e.classList.remove("bump"); void e.offsetWidth; e.classList.add("bump"); }
   function toast(t) { const el = $("#toast"); el.innerHTML = t; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, 3200); }
   const I = {
     bag: '<svg viewBox="0 0 24 24"><path d="M9 4h6a2 2 0 0 1 2 2v1h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3V6a2 2 0 0 1 2-2zm0 3h6V6H9z"/></svg>',
@@ -51,6 +56,7 @@
     check: '<svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2l5 5 11-11-1.5-1.4z"/></svg>'
   };
   const mission = () => CH.find(c => c.id === S.active);
+  const CAT = { time: "TIME", years: "XP", proto: "PRODUCT", builder: "ROLES", mcp: "TOOLS", spam: "NOISE", degree: "EDU", junior: "ENTRY", cv: "BOSS" };
   const marksOf = id => S.marks[id] || [];
   const totalPts = CH.reduce((a, c) => a + c.pts, 0);
   const score = () => CH.reduce((a, c) => a + (S.best[c.id] || 0), 0);
@@ -128,18 +134,19 @@
     const s = score();
     $("#score").textContent = s; $("#score-total").textContent = "/" + totalPts; $("#score-bar").style.width = (100 * s / totalPts) + "%";
     const a = lightsAvail(), unlocked = Math.min(2, 1 + (S.start && (Date.now() - S.start) / 60000 >= LIGHT_EVERY ? 1 : 0));
-    $("#lights").innerHTML = [0, 1].map(i => `<span class="${i < S.lightsUsed ? "off" : i < unlocked ? "" : "off"}">💡</span>`).join("");
+    $("#lights").innerHTML = [0, 1].map(i => `<span class="bulb ${i >= S.lightsUsed && i < unlocked ? "on" : ""}"></span>`).join("");
+    $("#g-cap").textContent = `${CH.filter(c => (S.best[c.id] || 0) >= c.pts).length}/${CH.length} captured`;
     $("#lights").title = a ? `${a} אורות זמינים` : unlocked < 2 ? "האור הבא נפתח אחרי 10 דקות" : "השתמשתם בשני האורות";
   }
   function renderTiles() {
     $("#tiles").innerHTML = CH.map((c, i) => {
       const b = S.best[c.id] || 0, st = b >= c.pts ? "full" : b > 0 ? "part" : "";
-      return `<button class="tile ${S.active === c.id ? "on" : ""} ${st}" data-mission="${c.id}"><span class="t-ring"></span><span class="t-n">${i + 1}</span><span class="t-name">${c.short || c.title}</span><span class="t-pts">${b}/${c.pts}</span></button>`;
+      return `<button class="tile ${S.active === c.id ? "on" : ""} ${st}" data-mission="${c.id}"><span class="t-cat">${String(i + 1).padStart(2, "0")} · ${CAT[c.id] || ""}</span><span class="t-name">${c.short || c.title}</span><span class="t-pts">${b}<small>/${c.pts}</small></span><span class="t-prog" style="width:${100 * b / c.pts}%"></span></button>`;
     }).join("");
   }
   function renderActive() {
     const c = mission(), el = $("#active");
-    if (!c) { el.innerHTML = `<div class="a-empty">בחרו משימה למעלה.<br>אחר כך מחפשים, פותחים מודעות ומסמנים 🚩</div>`; return; }
+    if (!c) { el.innerHTML = `<div class="a-empty"><b>בחרו משימה.</b>מחפשים, פותחים מודעות, מסמנים 🚩<br>ולוחצים בדיקה.</div>`; return; }
     const b = S.best[c.id] || 0, r = S.res[c.id];
     let body = "";
     if (c.type === "mark") {
@@ -155,7 +162,7 @@
         <div class="a-actions"><button class="go" data-open-cv>פתיחת מעבדת קורות החיים</button>
         <button class="go light" data-light="${c.id}" ${lightsAvail() && !b ? "" : "disabled"}>💡 אור</button></div>`;
     }
-    el.innerHTML = `<div class="a-top"><span class="a-title">${c.title}</span><span class="pts">${b}/${c.pts}</span></div><p class="a-prompt">${c.prompt}</p>${body}`;
+    el.innerHTML = `<div class="a-top"><div><div class="a-cat">Mission ${String(CH.indexOf(c) + 1).padStart(2, "0")} · ${CAT[c.id] || ""}</div><div class="a-title">${c.title}</div></div><span class="pts">${b}/${c.pts}</span></div><p class="a-prompt">${c.prompt}</p>${body}`;
   }
   function renderGame() { renderStats(); renderTiles(); renderActive(); }
 
@@ -167,7 +174,7 @@
     const msg = pts >= c.pts ? `🚩 מושלם! ${got}/${c.need} · ${pts} נק׳` :
       `${got} מתוך ${c.need} נכונות${wrong ? ` · ${wrong} סימונים שגויים מורידים נקודות` : ""} · ${pts} נק׳` + (got < c.need ? " · משהו עוד מסתתר בלוח" : "");
     S.res[c.id] = { pts, msg }; store.set("res", S.res);
-    if (pts > (S.best[c.id] || 0)) { S.best[c.id] = pts; store.set("best", S.best); if (pts >= c.pts) toast(`🚩 דגל! ${c.title} · +${pts}`); }
+    if (pts > (S.best[c.id] || 0)) { S.best[c.id] = pts; store.set("best", S.best); bump(); if (pts >= c.pts) capture(c, pts); }
     renderGame(); sync();
   }
   function useLight(c) {
@@ -242,7 +249,7 @@
       <div class="verdict">${pass ? "✅ עברתם את ה-ATS. עכשיו רק צריך שבן אדם יקרא." : r.score >= 50 ? "🟡 כמעט. ה-ATS מהסס, כמו מגייס ביום ראשון בבוקר." : "❌ נדחה אוטומטית. בלי מייל, כמו באמת."}</div>
       <ul class="breakdown">${r.lines.map(([p, max, t, n]) => `<li class="${p < 0 ? "neg" : ""}"><div class="bd-top"><b>${t}</b><span class="en">${p}${max ? " / " + max : ""}</span></div>${max ? `<div class="bd-bar"><i style="width:${Math.max(0, 100 * p / max)}%"></i></div>` : ""}<div class="muted small">${n}</div></li>`).join("")}</ul>`;
     const c = CH.find(x => x.type === "ats");
-    if (pass && c && !(S.best[c.id] >= c.pts)) { S.best[c.id] = c.pts; store.set("best", S.best); toast(`🚩 דגל! ${c.title} · +${c.pts}`); renderGame(); }
+    if (pass && c && !(S.best[c.id] >= c.pts)) { S.best[c.id] = c.pts; store.set("best", S.best); bump(); capture(c, c.pts); renderGame(); }
     sync({ ats: r.score });
   }
 

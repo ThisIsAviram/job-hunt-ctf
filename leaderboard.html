@@ -3,36 +3,36 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>לידרבורד | BU Job Lab</title><meta name="robots" content="noindex"><link rel="icon" href="favicon.png">
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;800&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;800&family=Inter:wght@500;700;800&family=Rubik:wght@700;900&family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet">
 <style>
-:root{--he:"Assistant",Arial,sans-serif;--en:"Inter",Arial,sans-serif}
+:root{--he:"Assistant",Arial,sans-serif;--en:"JetBrains Mono",monospace;--disp:"Rubik",sans-serif;--lime:#C8FF2E}
 *{box-sizing:border-box}html,body{margin:0;height:100%}
-body{font-family:var(--he);color:#fff;background:radial-gradient(1200px 600px at 80% -10%,#3A4FA8 0%,transparent 60%),radial-gradient(900px 500px at 0% 110%,#0A66C2 0%,transparent 55%),#121A3E;overflow:hidden}
+body{font-family:var(--he);color:#fff;background:#0B0D12;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:28px 28px;overflow:hidden}
 .wrap{display:grid;grid-template-rows:auto 1fr auto;height:100vh;padding:28px 40px;gap:20px}
 header{display:flex;align-items:center;gap:24px}
 header img{height:64px;background:#fff;border-radius:10px;padding:6px 10px}
-h1{margin:0;font-size:40px;font-weight:800}
+h1{margin:0;font-family:var(--disp);font-size:52px;font-weight:900;letter-spacing:-1.5px}
 .code{margin-inline-start:auto;text-align:center}
 .code small{display:block;opacity:.7;font-size:16px}
-.code b{font-family:var(--en);font-size:44px;letter-spacing:4px;background:rgba(255,255,255,.1);border:2px dashed rgba(255,255,255,.35);border-radius:12px;padding:2px 18px}
-.timer{font-family:var(--en);font-weight:800;font-size:56px;min-width:190px;text-align:center}
+.code b{font-family:var(--en);font-size:46px;letter-spacing:6px;background:var(--lime);color:#000;padding:2px 18px;display:inline-block}
+.timer{font-family:var(--en);font-weight:800;font-size:60px;min-width:210px;text-align:center;border:1px solid #262B38;background:#12151D;padding:0 12px}
 .timer.late{color:#FF8A80}
 main{display:grid;grid-template-columns:2.2fr 1fr;gap:24px;min-height:0}
 .board{display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden}
-.row{display:grid;grid-template-columns:56px 1fr 110px;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 16px;transition:transform .5s}
+.row{display:grid;grid-template-columns:64px 1fr 120px;align-items:center;gap:14px;background:#12151D;border:1px solid #262B38;padding:10px 16px}
 .rank{font-family:var(--en);font-weight:800;font-size:28px;text-align:center}
-.row:nth-child(1){background:linear-gradient(90deg,rgba(231,163,62,.35),rgba(255,255,255,.06));border-color:#E7A33E}
+.row:nth-child(1){background:linear-gradient(90deg,rgba(200,255,46,.18),#12151D);border-color:var(--lime)}.row:nth-child(1) .rank{color:var(--lime)}
 .row:nth-child(2){border-color:#C9D3E8}.row:nth-child(3){border-color:#C98B5B}
-.nick{font-size:26px;font-weight:800;line-height:1.1}
+.nick{font-family:var(--disp);font-size:28px;font-weight:900;line-height:1.1}
 .meta{font-size:15px;opacity:.75;margin-top:2px}
 .bar{height:8px;background:rgba(255,255,255,.12);border-radius:8px;margin-top:6px}
-.bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#7CC6F2,#B7F0D2);transition:width .8s}
+.bar i{display:block;height:100%;background:var(--lime);box-shadow:0 0 12px var(--lime);transition:width .8s}
 .pts{font-family:var(--en);font-weight:800;font-size:38px;text-align:left}
 .side{display:flex;flex-direction:column;gap:16px;min-height:0}
-.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px 18px}
+.card{background:#12151D;border:1px solid #262B38;padding:16px 18px}
 .card h3{margin:0 0 10px;font-size:20px}
 .m{display:grid;grid-template-columns:1fr 60px;gap:8px;align-items:center;font-size:16px;margin:6px 0}
-.mb{height:6px;background:rgba(255,255,255,.12);border-radius:6px;grid-column:1/-1}.mb i{display:block;height:100%;background:#3DDC97;border-radius:6px}
+.mb{height:6px;background:rgba(255,255,255,.12);border-radius:6px;grid-column:1/-1}.mb i{display:block;height:100%;background:var(--lime)}
 .big{font-family:var(--en);font-weight:800;font-size:44px}
 .empty{opacity:.7;font-size:24px;text-align:center;margin-top:10vh}
 footer{display:flex;justify-content:space-between;opacity:.6;font-size:15px}
