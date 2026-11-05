@@ -16,7 +16,7 @@
   async function fetchEvent(c) { const { data, error } = await sb.rpc("event_by_code", { p_code: c }); if (error) throw error; return data && data[0]; }
   function applyEvent(ev) {
     status = ev.status; offset = Date.parse(ev.server_now) - Date.now();
-    if (ev.started_at) BU.eventStart = Date.parse(ev.started_at) - offset;
+    BU.duration = ev.duration_min; if (ev.started_at) BU.eventStart = Date.parse(ev.started_at) - offset;
     $("#g-event").textContent = ev.title + " · " + ev.code;
   }
   async function waitLive() {

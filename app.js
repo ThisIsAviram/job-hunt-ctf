@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   const JOBS = window.JOBS || [], CH = window.CHALLENGES || [], FINAL = window.FINAL || {};
-  const SALT = "nitzanim-2030", GAME_MIN = 20, LIGHT_EVERY = 10, LIGHT_MS = 7000;
+  const SALT = "nitzanim-2030", LIGHT_MS = 7000; let GAME_MIN = 12, LIGHT_EVERY = 6;
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const store = {
     get(k, d) { try { const v = localStorage.getItem("bujl:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
@@ -102,7 +102,7 @@
       <li class="card ${j.id === S.sel ? "sel" : ""} ${mk.includes(j.id) ? "marked" : ""}" data-id="${j.id}">
         ${logo(j)}
         <div>
-          <div class="c-title">${hl(j.title)}${yearTag(j)}</div>
+          <div class="c-title" ${j.lang === "he" ? 'dir="rtl"' : ""}>${hl(j.title)}${yearTag(j)}</div>
           <div class="c-co">${esc(j.company)}</div>
           <div class="c-loc">${esc(j.city || "Tel Aviv")}</div>
           <div class="c-chips">${(j.tools || []).slice(0, 3).map(t => `<span class="c-chip">${esc(t)}</span>`).join("")}</div>
@@ -121,7 +121,7 @@
       <div class="d-cover" style="--c:${tint(j.company)};--a:${[...j.company].reduce((a, c) => a + c.charCodeAt(0), 0) % 160 + 10}deg"></div>
       <div class="d-top">
         <div class="d-head">${logo(j, "logo-lg")}<div><div class="d-co-name">${esc(j.company)}</div><div class="muted en small">${esc(ROLE_EN[j.role_type] || "")}</div></div></div>
-        <h1 class="d-title">${esc(j.title)}${yearTag(j)}</h1>
+        <h1 class="d-title" ${j.lang === "he" ? 'dir="rtl" style="font-family:var(--he)"' : ""}>${esc(j.title)}${yearTag(j)}</h1>
         <div class="d-sub">${esc(j.city || "Tel Aviv")} · ${posted(j)} · Applicants: we stopped counting</div>
         <div class="d-facts">
           <div class="fact">${I.bag}<span class="chip">Full-time</span><span class="chip gray">${esc(LEVEL_EN[j.seniority] || "")}</span></div>
@@ -135,9 +135,9 @@
         </div>
       </div>
       <div class="d-section"><h3>על המשרה</h3>
-        <div class="d-ad"><p class="lead">${fmt(j.summary || "", j)}</p>
-          <h4>What you'll do</h4><ul>${li(j.responsibilities)}</ul>
-          <h4>What we're looking for</h4><ul>${li(j.requirements)}</ul></div></div>
+        <div class="d-ad ${j.lang === "he" ? "he" : ""}"><p class="lead">${fmt(j.summary || "", j)}</p>
+          <h4>${j.lang === "he" ? "תיאור התפקיד" : "What you'll do"}</h4><ul>${li(j.responsibilities)}</ul>
+          <h4>${j.lang === "he" ? "דרישות" : "What we're looking for"}</h4><ul>${li(j.requirements)}</ul></div></div>
       ${j.tools && j.tools.length ? `<div class="d-section"><h3>כישורים</h3><div class="skills">${j.tools.map(t => `<span class="skill">${hl(t)}</span>`).join("")}</div></div>` : ""}
       <div class="d-section d-about"><h3>על החברה</h3>
         <div class="d-co">${logo(j, "logo-sm")}<div><div class="d-co-name">${esc(j.company)}</div><div class="muted small">${esc(j.city || "Tel Aviv")}</div></div></div>
@@ -163,7 +163,7 @@
   }
   function openCompare() {
     const [a, b] = S.cmp.map(id => JOBS.find(x => x.id === id));
-    const col = j => `<div class="cmp-col"><div class="cmp-head">${logo(j)}<div><div class="d-co-name en">${esc(j.title)}</div><div class="muted en small">${esc(j.company)}</div></div></div>
+    const col = j => `<div class="cmp-col ${j.lang === "he" ? "he" : ""}"><div class="cmp-head">${logo(j)}<div><div class="d-co-name en">${esc(j.title)}</div><div class="muted en small">${esc(j.company)}</div></div></div>
       <div class="d-ad"><p class="lead">${fmt(j.summary, j)}</p><h4>What you'll do</h4><ul>${(j.responsibilities || []).map(x => `<li>${fmt(x, j)}</li>`).join("")}</ul>
       <h4>What we're looking for</h4><ul>${(j.requirements || []).map(x => `<li>${fmt(x, j)}</li>`).join("")}</ul></div>
       <div class="cmp-stats"><span><b>${(j.requirements || []).length}</b> דרישות</span><span><b>${(j.tools || []).length}</b> כלים</span><span><b>${(j.summary + (j.requirements || []).join(" ") + (j.responsibilities || []).join(" ")).split(/\s+/).length}</b> מילים</span></div></div>`;
@@ -242,7 +242,7 @@
 
   /* ---------- timer ---------- */
   function tick() {
-    if (BU.eventStart) S.start = BU.eventStart;
+    if (BU.eventStart) S.start = BU.eventStart; if (BU.duration) { GAME_MIN = BU.duration; LIGHT_EVERY = Math.round(BU.duration / 2); }
     const el = $("#timer");
     if (!S.start) { el.textContent = `${GAME_MIN}:00`; return; }
     const left = Math.max(0, GAME_MIN * 60 - Math.floor((Date.now() - S.start) / 1000));
@@ -251,7 +251,7 @@
     const unlocked = (Date.now() - S.start) / 60000 >= LIGHT_EVERY;
     if (unlocked && !tick.lit) { tick.lit = true; if (tick.started) toast("💡 נפתח אור שני. השתמשו בחוכמה."); renderStats(); renderActive(); }
     tick.started = true;
-    if (left === 0 && !tick.done) { tick.done = true; toast("⏰ הזמן נגמר. מצלמים את הניקוד ועוברים לקיר."); sync({ finished: true }); }
+    if (left === 0 && !tick.done) { tick.done = true; sync({ finished: true }); $("#final-title").textContent = "⏰ הזמן נגמר"; $("#final-prompt").textContent = "לפני שחוזרים לחדר: כתבו בשלוש שורות מודעה לבוגר ניצנים ב-2030. מה הוא יודע לעשות, ומה הוא עושה בלי AI?"; $("#final-text").value = store.get("final", ""); $("#final").hidden = false; }
   }
 
   /* ---------- CV lab / ATS ---------- */
@@ -303,7 +303,7 @@
 
   /* ---------- tutorial (coach marks) ---------- */
   const TUT = [
-    { sel: ".game", t: "זה הצד שלכם", b: "9 משימות, שעון, ניקוד ואורות. כל משימה מבקשת למצוא מודעות בלוח. בואו נעשה סיבוב אימון אחד." },
+    { sel: ".game", t: "זה הצד שלכם", b: "7 משימות, שעון, ניקוד ואורות. כל משימה מבקשת למצוא מודעות בלוח. בואו נעשה סיבוב אימון אחד." },
     { sel: "#active", t: "משימת חימום", b: "פתחנו לכם משימת אימון בלי ניקוד: למצוא את המודעה של Lusha.", on: () => { S.active = "warm"; renderGame(); } },
     { sel: ".nav-search", t: "חיפוש", b: "הקלידו <b>Lusha</b> בחיפוש.", wait: () => /lusha/i.test(S.q) },
     { sel: () => $('.card[data-id="d2"]'), t: "פותחים מודעה", b: "לחצו על המודעה כדי לקרוא אותה.", wait: () => S.sel === "d2" },
@@ -311,8 +311,8 @@
     { sel: '[data-mark="d2"]', t: "מסמנים 🚩", b: "לחצו <b>סימון למשימה</b>.", wait: () => marksOf("warm").includes("d2") },
     { sel: '[data-check="warm"]', t: "בודקים", b: "לחצו <b>בדיקה</b>. ניקוד מלא, חלקי, או מינוס על טעויות.", wait: () => !!S.res.warm },
     { sel: '[data-cmp="d2"]', t: "השוואה", b: "רוצים לראות איך שתי מודעות כתובות? <b>⇄ השוואה</b> על שתיים, ושמים אותן זו ליד זו." },
-    { sel: "#lights", t: "שני אורות", b: "אחד עכשיו, אחד אחרי 10 דקות. אור מחשיך את הלוח ומאיר את מה שפספסתם במשימה הפעילה. 7 שניות. תשתמשו בחוכמה." },
-    { sel: "#timer", t: "20 דקות", b: "השעון מתחיל כשהמנחה לוחץ START (או כשאתם לוחצים כאן למטה). מוכנים?", last: true }
+    { sel: "#lights", t: "שני אורות", b: "אחד עכשיו, אחד באמצע המשחק. אור מחשיך את הלוח ומאיר את מה שפספסתם במשימה הפעילה. 7 שניות. תשתמשו בחוכמה." },
+    { sel: "#timer", t: "12 דקות", b: "השעון מתחיל כשהמנחה לוחץ START (או כשאתם לוחצים כאן למטה). מוכנים?", last: true }
   ];
   let tut = null;
   function tutorial(done) {

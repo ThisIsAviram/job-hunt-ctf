@@ -14,7 +14,7 @@ create table if not exists public.events (
   code text unique not null,
   title text not null default 'ציד משרות',
   status text not null default 'draft' check (status in ('draft','lobby','live','closed')),
-  duration_min int not null default 20,
+  duration_min int not null default 12,
   started_at timestamptz,
   created_at timestamptz not null default now(),
   owner uuid default auth.uid()

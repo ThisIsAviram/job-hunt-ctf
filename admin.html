@@ -67,7 +67,7 @@ async function boot() {
       <div class="card"><h2>אירוע חדש</h2>
         <label>שם האירוע<input id="t" value="ציד משרות · שיח אסטרטגי"></label>
         <label>קוד (התאריך של היום + 2 אותיות)<div class="code-in"><input class="d" id="cd" value="${today()}" readonly><input class="l" id="cl" value="${letters()}" maxlength="2"></div></label>
-        <label>משך (דקות)<input id="dur" type="number" value="20" min="5" max="90"></label>
+        <label>משך (דקות)<input id="dur" type="number" value="12" min="5" max="90"></label>
         <button class="primary" id="create">יצירת אירוע</button> <span class="err" id="cerr"></span>
       </div>
       <div class="card" style="margin-top:16px"><h2>אירועים</h2><div id="evs"></div></div>

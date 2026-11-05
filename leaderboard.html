@@ -45,7 +45,7 @@ footer{display:flex;justify-content:space-between;opacity:.6;font-size:15px}
     <img src="bu-logo.png" alt="BU">
     <div><h1 id="title">ציד משרות</h1><div style="opacity:.75;font-size:18px">BU Job Lab · לידרבורד חי</div></div>
     <div class="code"><small>קוד המשחק</small><b id="code">——</b></div>
-    <div class="timer" id="timer">20:00</div>
+    <div class="timer" id="timer">12:00</div>
   </header>
   <main>
     <section class="board" id="board"><div class="empty">ממתינים לשחקנים…</div></section>
@@ -66,7 +66,7 @@ const $ = s => document.querySelector(s), esc = s => String(s ?? "").replace(/[&
 $("#code").textContent = code || "——";
 $("#url").textContent = location.origin + location.pathname.replace(/leaderboard\.html$/, "") + "?code=" + code;
 const sb = createClient(C.supabaseUrl, C.supabaseAnonKey);
-let start = null, dur = 20, offset = 0;
+let start = null, dur = 12, offset = 0;
 async function load() {
   const [{ data: ev }, { data: rows }] = await Promise.all([sb.rpc("event_by_code", { p_code: code }), sb.rpc("leaderboard", { p_code: code })]);
   const e = ev && ev[0]; if (e) { $("#title").textContent = e.title; dur = e.duration_min; offset = Date.parse(e.server_now) - Date.now(); start = e.started_at ? Date.parse(e.started_at) - offset : null; if (e.status === "closed") $("#timer").textContent = "סוף"; }
