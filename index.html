@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BU Job Lab · ציד משרות</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="demo-bar">לוח דמה לסדנה · אל תשלחו קורות חיים, אף אחד לא יחזור אליכם (גם לא בלוח האמיתי) · <a href="#about" data-open="about">על המקורות</a></div>
+<header class="top">
+  <div class="brand"><span class="logo">BU</span><span class="brand-name">Job Lab</span><span class="tagline">המשרות אמיתיות. התאריכים בחופשה.</span></div>
+  <div class="search"><input id="q" type="search" placeholder="חיפוש: React, Cursor, agents, ״תואר״, ״ninja״…" autocomplete="off"></div>
+  <div class="score"><span id="score">0</span><span class="score-label">נקודות</span></div>
+</header>
+
+<main class="layout">
+  <aside class="filters">
+    <h3>סינון</h3>
+    <div class="chips" id="chips-role"></div>
+    <div class="chips" id="chips-level"></div>
+    <label class="check"><input type="checkbox" id="only-marked"> רק משרות שסימנתי</label>
+    <p class="hint">סמנו משרה ב-☆. אצלנו זה לא מתחייב לכלום, כמו "נשמח לשמור את קורות החיים שלך במאגר".</p>
+    <div class="legend">
+      <div class="stat"><b id="count">0</b> משרות מוצגות</div>
+    </div>
+  </aside>
+
+  <section class="feed" id="feed"></section>
+
+  <aside class="ctf">
+    <div class="ctf-head">
+      <h2>🚩 ציד משרות · CTF</h2>
+      <p>המודעות לא מתוארכות. חלקן מ-2019–2021, חלקן מ-2026. כדי לפתור כל אתגר צריך לקרוא את <b>ההקשר</b>, לא רק לחפש מילה.</p>
+    </div>
+    <ol class="challenges" id="challenges"></ol>
+    <div class="ctf-foot">
+      <button class="ghost" id="reset">איפוס</button>
+      <button class="ghost" id="reveal-btn">מצב מנחה</button>
+    </div>
+  </aside>
+</main>
+
+<div class="modal" id="job-modal" hidden><div class="sheet" id="job-sheet"></div></div>
+<div class="modal" id="about" hidden><div class="sheet">
+  <button class="close" data-close>×</button>
+  <h2>על המקורות</h2>
+  <p>זהו לוח דמה של <b>BU Job Lab</b> שנבנה לסדנת שיח אסטרטגי בניצנים (בנתיבי אודי). זה לא אתר דרושים אמיתי, ואין דרכו הגשת מועמדות.</p>
+  <p>המודעות אמיתיות: מודעות 2019–2021 נלקחו משרשורי "Ask HN: Who is hiring" ב-Hacker News, ומודעות 2026 מלוח Secret Tel Aviv Jobs. הטקסט נוסח מחדש וקוצר. שמות הכלים, מספרי שנות הניסיון ודרישות התואר נשמרו כמו במקור. לכל מודעה יש קישור למקור במצב מנחה.</p>
+</div></div>
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
