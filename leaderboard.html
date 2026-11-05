@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>לידרבורד | BU Job Lab</title><meta name="robots" content="noindex"><link rel="icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;800&family=Inter:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--he:"Assistant",Arial,sans-serif;--en:"Inter",Arial,sans-serif}
+*{box-sizing:border-box}html,body{margin:0;height:100%}
+body{font-family:var(--he);color:#fff;background:radial-gradient(1200px 600px at 80% -10%,#3A4FA8 0%,transparent 60%),radial-gradient(900px 500px at 0% 110%,#0A66C2 0%,transparent 55%),#121A3E;overflow:hidden}
+.wrap{display:grid;grid-template-rows:auto 1fr auto;height:100vh;padding:28px 40px;gap:20px}
+header{display:flex;align-items:center;gap:24px}
+header img{height:64px;background:#fff;border-radius:10px;padding:6px 10px}
+h1{margin:0;font-size:40px;font-weight:800}
+.code{margin-inline-start:auto;text-align:center}
+.code small{display:block;opacity:.7;font-size:16px}
+.code b{font-family:var(--en);font-size:44px;letter-spacing:4px;background:rgba(255,255,255,.1);border:2px dashed rgba(255,255,255,.35);border-radius:12px;padding:2px 18px}
+.timer{font-family:var(--en);font-weight:800;font-size:56px;min-width:190px;text-align:center}
+.timer.late{color:#FF8A80}
+main{display:grid;grid-template-columns:2.2fr 1fr;gap:24px;min-height:0}
+.board{display:flex;flex-direction:column;gap:10px;min-height:0;overflow:hidden}
+.row{display:grid;grid-template-columns:56px 1fr 110px;align-items:center;gap:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 16px;transition:transform .5s}
+.rank{font-family:var(--en);font-weight:800;font-size:28px;text-align:center}
+.row:nth-child(1){background:linear-gradient(90deg,rgba(231,163,62,.35),rgba(255,255,255,.06));border-color:#E7A33E}
+.row:nth-child(2){border-color:#C9D3E8}.row:nth-child(3){border-color:#C98B5B}
+.nick{font-size:26px;font-weight:800;line-height:1.1}
+.meta{font-size:15px;opacity:.75;margin-top:2px}
+.bar{height:8px;background:rgba(255,255,255,.12);border-radius:8px;margin-top:6px}
+.bar i{display:block;height:100%;border-radius:8px;background:linear-gradient(90deg,#7CC6F2,#B7F0D2);transition:width .8s}
+.pts{font-family:var(--en);font-weight:800;font-size:38px;text-align:left}
+.side{display:flex;flex-direction:column;gap:16px;min-height:0}
+.card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:16px 18px}
+.card h3{margin:0 0 10px;font-size:20px}
+.m{display:grid;grid-template-columns:1fr 60px;gap:8px;align-items:center;font-size:16px;margin:6px 0}
+.mb{height:6px;background:rgba(255,255,255,.12);border-radius:6px;grid-column:1/-1}.mb i{display:block;height:100%;background:#3DDC97;border-radius:6px}
+.big{font-family:var(--en);font-weight:800;font-size:44px}
+.empty{opacity:.7;font-size:24px;text-align:center;margin-top:10vh}
+footer{display:flex;justify-content:space-between;opacity:.6;font-size:15px}
+.join-url{font-family:var(--en)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="bu-logo.png" alt="BU">
+    <div><h1 id="title">ציד משרות</h1><div style="opacity:.75;font-size:18px">BU Job Lab · לידרבורד חי</div></div>
+    <div class="code"><small>קוד המשחק</small><b id="code">——</b></div>
+    <div class="timer" id="timer">20:00</div>
+  </header>
+  <main>
+    <section class="board" id="board"><div class="empty">ממתינים לשחקנים…</div></section>
+    <aside class="side">
+      <div class="card"><h3>שחקנים</h3><div class="big" id="n">0</div></div>
+      <div class="card"><h3>משימות שנפתרו במלואן</h3><div id="missions"></div></div>
+      <div class="card"><h3>🔍 הכי סקרנים</h3><div id="curious"></div></div>
+    </aside>
+  </main>
+  <footer><span>נכנסים ב: <span class="join-url" id="url"></span></span><span>מתעדכן כל 3 שניות</span></footer>
+</div>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const C = window.BU_CONFIG, CH = window.CHALLENGES, code = (new URLSearchParams(location.search).get("code") || "").toUpperCase();
+const $ = s => document.querySelector(s), esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+$("#code").textContent = code || "——";
+$("#url").textContent = location.origin + location.pathname.replace(/leaderboard\.html$/, "") + "?code=" + code;
+const sb = createClient(C.supabaseUrl, C.supabaseAnonKey);
+let start = null, dur = 20, offset = 0;
+async function load() {
+  const [{ data: ev }, { data: rows }] = await Promise.all([sb.rpc("event_by_code", { p_code: code }), sb.rpc("leaderboard", { p_code: code })]);
+  const e = ev && ev[0]; if (e) { $("#title").textContent = e.title; dur = e.duration_min; offset = Date.parse(e.server_now) - Date.now(); start = e.started_at ? Date.parse(e.started_at) - offset : null; if (e.status === "closed") $("#timer").textContent = "סוף"; }
+  const list = rows || []; $("#n").textContent = list.length;
+  $("#board").innerHTML = list.length ? list.slice(0, 10).map((r, i) => {
+    const st = r.stats || {}, full = CH.filter(c => (r.missions || {})[c.id] >= c.pts).length;
+    return `<div class="row"><div class="rank">${i + 1}</div><div><div class="nick">${esc(r.nickname)}</div>
+      <div class="meta">🚩 ${full}/${CH.length} משימות · 📄 ${st.opened || 0} מודעות · 🔍 ${st.searches || 0} חיפושים · 💡 ${st.lights || 0}/2${st.ats ? ` · ATS ${st.ats}` : ""}</div>
+      <div class="bar"><i style="width:${r.score}%"></i></div></div><div class="pts">${r.score}</div></div>`; }).join("") : `<div class="empty">ממתינים לשחקנים…</div>`;
+  $("#missions").innerHTML = CH.map(c => { const k = list.filter(r => (r.missions || {})[c.id] >= c.pts).length, p = list.length ? 100 * k / list.length : 0;
+    return `<div class="m"><span>${esc(c.title)}</span><b style="font-family:var(--en)">${k}</b><div class="mb"><i style="width:${p}%"></i></div></div>`; }).join("");
+  $("#curious").innerHTML = [...list].sort((a, b) => ((b.stats || {}).opened || 0) - ((a.stats || {}).opened || 0)).slice(0, 3)
+    .map(r => `<div class="m"><span>${esc(r.nickname)}</span><b style="font-family:var(--en)">${(r.stats || {}).opened || 0}</b></div>`).join("") || "—";
+}
+function tick() { if (!start) return; const left = Math.max(0, dur * 60 - Math.floor((Date.now() - start) / 1000)); const t = $("#timer"); if (t.textContent === "סוף") return;
+  t.textContent = `${String(Math.floor(left / 60)).padStart(2, "0")}:${String(left % 60).padStart(2, "0")}`; t.classList.toggle("late", left < 300); }
+load(); setInterval(load, 3000); setInterval(tick, 1000);
+</script>
+</body>
+</html>

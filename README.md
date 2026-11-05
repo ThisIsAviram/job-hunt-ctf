@@ -5,3 +5,10 @@
 
 - מצב מנחה: כפתור "מצב מנחה" או `?reveal` בכתובת. מציג את השנים ואת הקישורים למקור.
 - הניקוד נשמר בדפדפן של כל צוות. "איפוס" מנקה.
+
+## מולטיפלייר (אופציונלי)
+1. פרויקט Supabase חדש → SQL Editor → להריץ את `supabase/schema.sql`.
+2. Auth → Providers: להפעיל **Anonymous sign-ins** ואת **GitHub** (OAuth App ב-GitHub, callback מה-Supabase).
+3. Auth → URL Configuration: להוסיף את כתובת ה-Pages ל-Redirect URLs.
+4. למלא `config.js` (URL + anon key).
+- שחקנים: `/?code=051126BU` · לידרבורד: `/leaderboard.html?code=…` · ניהול: `/admin.html` (כניסה עם GitHub).

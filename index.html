@@ -3,55 +3,157 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BU Job Lab · ציד משרות</title>
+<title>משרות | BU Job Lab</title>
 <meta name="robots" content="noindex">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="demo-bar">לוח דמה לסדנה · אל תשלחו קורות חיים, אף אחד לא יחזור אליכם (גם לא בלוח האמיתי) · <a href="#about" data-open="about">על המקורות</a></div>
-<header class="top">
-  <div class="brand"><span class="logo">BU</span><span class="brand-name">Job Lab</span><span class="tagline">המשרות אמיתיות. התאריכים בחופשה.</span></div>
-  <div class="search"><input id="q" type="search" placeholder="חיפוש: React, Cursor, agents, ״תואר״, ״ninja״…" autocomplete="off"></div>
-  <div class="score"><span id="score">0</span><span class="score-label">נקודות</span></div>
-</header>
+<div class="app">
 
-<main class="layout">
-  <aside class="filters">
-    <h3>סינון</h3>
-    <div class="chips" id="chips-role"></div>
-    <div class="chips" id="chips-level"></div>
-    <label class="check"><input type="checkbox" id="only-marked"> רק משרות שסימנתי</label>
-    <p class="hint">סמנו משרה ב-☆. אצלנו זה לא מתחייב לכלום, כמו "נשמח לשמור את קורות החיים שלך במאגר".</p>
-    <div class="legend">
-      <div class="stat"><b id="count">0</b> משרות מוצגות</div>
+  <!-- ===== GAME PANEL (1/4) ===== -->
+  <aside class="game" id="game">
+    <div class="g-head">
+      <img class="g-logo" src="bu-logo.png" alt="BU · Be the Future You">
+      <div><div class="g-title">ציד משרות <span>CTF</span></div><div class="g-event" id="g-event"></div></div>
+    </div>
+    <div class="g-stats">
+      <div class="stat"><small>זמן</small><b id="timer">20:00</b></div>
+      <div class="stat"><small>ניקוד</small><b><span id="score">0</span><em id="score-total">/100</em></b></div>
+      <div class="stat"><small>אורות</small><b id="lights">💡</b></div>
+    </div>
+    <div class="g-bar"><i id="score-bar"></i></div>
+
+    <div class="g-label">בחרו משימה</div>
+    <div class="tiles" id="tiles"></div>
+
+    <div class="active" id="active"></div>
+
+    <div class="g-foot">
+      <button class="link-btn" id="how-btn">איך משחקים</button>
+      <button class="link-btn" id="final-btn">בונוס לקיר</button>
+      <button class="link-btn" id="reset">איפוס</button>
     </div>
   </aside>
 
-  <section class="feed" id="feed"></section>
-
-  <aside class="ctf">
-    <div class="ctf-head">
-      <h2>🚩 ציד משרות · CTF</h2>
-      <p>המודעות לא מתוארכות. חלקן מ-2019–2021, חלקן מ-2026. כדי לפתור כל אתגר צריך לקרוא את <b>ההקשר</b>, לא רק לחפש מילה.</p>
+  <!-- ===== JOB SITE (3/4) ===== -->
+  <div class="site">
+    <header class="nav">
+      <a class="nav-brand" href="#" aria-label="BU Job Lab"><img src="bu-mark.png" alt=""><span>Job Lab</span></a>
+      <label class="nav-search"><svg viewBox="0 0 24 24"><path d="M21 19.6l-5.4-5.4A7 7 0 1 0 14.2 15.6l5.4 5.4zM5 10a5 5 0 1 1 10 0A5 5 0 0 1 5 10z"/></svg><input id="q" type="search" placeholder="חיפוש: React, Cursor, MCP, degree…" autocomplete="off"></label>
+      <label class="nav-search nav-loc"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg><input value="Tel Aviv District, Israel" readonly></label>
+      <nav class="nav-items">
+        <a class="ni" href="#" data-toast="אין פיד. רק משרות. כמו שצריך."><svg viewBox="0 0 24 24"><path d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z"/></svg><span>בית</span></a>
+        <a class="ni" href="#" data-toast="ברשת שלך יש 500+ קשרים. אף אחד מהם לא מגייס."><svg viewBox="0 0 24 24"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm7 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2 20c0-3.3 3.1-6 7-6s7 2.7 7 6zm15 0c0-1.7-.6-3.2-1.6-4.4 3.3.2 5.6 2 5.6 4.4z"/></svg><span>הרשת שלי</span></a>
+        <a class="ni on" href="#"><svg viewBox="0 0 24 24"><path d="M9 4h6a2 2 0 0 1 2 2v1h3a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h3V6a2 2 0 0 1 2-2zm0 3h6V6H9z"/></svg><span>משרות</span></a>
+        <a class="ni" href="#" data-toast="מגייס/ת צפה בפרופיל שלך. סתם, זה בוט."><svg viewBox="0 0 24 24"><path d="M12 22a2.5 2.5 0 0 0 2.5-2.5h-5A2.5 2.5 0 0 0 12 22zm7-6V11a7 7 0 0 0-5-6.7V3h-4v1.3A7 7 0 0 0 5 11v5l-2 2v1h18v-1z"/></svg><span>התראות</span><i class="dot">9+</i></a>
+        <a class="ni me" href="#" data-toast="הפרופיל שלך: 'Open to work' מאז 2019."><span class="avatar">את/ה</span><span>אני ▾</span></a>
+      </nav>
+    </header>
+    <div class="subbar">
+      <div class="pills" id="pills"></div>
+      <div class="demo-note">לוח דמה לסדנה · <a href="#" data-open="about">מה זה?</a></div>
     </div>
-    <ol class="challenges" id="challenges"></ol>
-    <div class="ctf-foot">
-      <button class="ghost" id="reset">איפוס</button>
-      <button class="ghost" id="reveal-btn">מצב מנחה</button>
-    </div>
-  </aside>
-</main>
+    <main class="panes">
+      <section class="list-pane">
+        <div class="list-head">
+          <div class="lh-title">משרות במחוז תל אביב</div>
+          <div class="muted small"><span id="count">0</span> תוצאות · ממוין לפי "רלוונטיות" (אין לנו מושג מה זה אומר)</div>
+        </div>
+        <ul class="list" id="list"></ul>
+      </section>
+      <section class="detail-pane" id="detail"></section>
+    </main>
+  </div>
+</div>
 
-<div class="modal" id="job-modal" hidden><div class="sheet" id="job-sheet"></div></div>
-<div class="modal" id="about" hidden><div class="sheet">
-  <button class="close" data-close>×</button>
-  <h2>על המקורות</h2>
-  <p>זהו לוח דמה של <b>BU Job Lab</b> שנבנה לסדנת שיח אסטרטגי בניצנים (בנתיבי אודי). זה לא אתר דרושים אמיתי, ואין דרכו הגשת מועמדות.</p>
-  <p>המודעות אמיתיות: מודעות 2019–2021 נלקחו משרשורי "Ask HN: Who is hiring" ב-Hacker News, ומודעות 2026 מלוח Secret Tel Aviv Jobs. הטקסט נוסח מחדש וקוצר. שמות הכלים, מספרי שנות הניסיון ודרישות התואר נשמרו כמו במקור. לכל מודעה יש קישור למקור במצב מנחה.</p>
+<!-- INTRO -->
+<div class="modal" id="intro" hidden><div class="sheet sheet-intro">
+  <img class="intro-logo" src="bu-logo.png" alt="BU">
+  <h1>ציד משרות · 20 דקות</h1>
+  <p class="lead">לפניכם לוח משרות של תל אביב. חלק מהמודעות מ-2019–2021, חלק מ-2026, ויש גם קצת רעש. התאריכים נמחקו.</p>
+  <ol class="rules">
+    <li><b>עובדים בזוגות.</b> מסך אחד, ראש אחד וחצי.</li>
+    <li><b>בוחרים משימה</b> בפאנל הימני. כל משימה מבקשת למצוא מודעות.</li>
+    <li><b>מסמנים מודעות</b> עם הכפתור <span class="kbd">🚩 סימון למשימה</span>, ואז לוחצים <span class="kbd">בדיקה</span>. אפשר לקבל ניקוד מלא או חלקי, וסימון שגוי מוריד נקודות.</li>
+    <li><b>שני אורות.</b> פעם ב-10 דקות נפתח "אור" שמאיר את מה שפספסתם במשימה הפעילה. תשתמשו בחוכמה.</li>
+    <li><b>המשימה האחרונה:</b> לכתוב קורות חיים לבוגרת שלנו שיעברו את ה-ATS של הלוח.</li>
+  </ol>
+  <p class="muted">טיפ: שימו לב לא רק למה שמבקשים, אלא גם לאיך כותבים, וכמה.</p>
+  <div class="join" id="join-form">
+    <div class="join-grid">
+      <label>קוד המשחק<input id="join-code" placeholder="051126BU" maxlength="8" autocomplete="off" class="en"></label>
+      <label>שם מלא<input id="join-name" placeholder="ישראל ישראלי" maxlength="60"></label>
+      <label>כינוי למסך הגדול<input id="join-nick" placeholder="Recruiter Slayer" maxlength="24"></label>
+    </div>
+    <div class="join-err" id="join-err" hidden></div>
+  </div>
+  <div class="join-wait" id="join-wait" hidden>⏳ נכנסתם. ממתינים שהמנחה יפתח את המשחק…</div>
+  <button class="btn-primary btn-lg" data-start id="join-go">יאללה, מתחילים ⏱</button>
 </div></div>
-<div class="toast" id="toast" hidden></div>
 
+<!-- CV LAB -->
+<div class="modal" id="cvlab" hidden><div class="sheet sheet-cv">
+  <button class="icon-btn close" data-close aria-label="סגירה">×</button>
+  <div class="cv-head"><h2>BU Resume Lab · ATS</h2><span class="muted">ציון 75 ומעלה = עוברים את המסנן האוטומטי</span></div>
+  <div class="cv-grid">
+    <div class="cv-col">
+      <div class="persona">
+        <div class="p-top"><span class="avatar lg">נ</span><div><b>נועה, 18</b><div class="muted small">בוגרת ניצנים · מסלול PRO · 2030</div></div></div>
+        <div class="p-label">העובדות (אסור להמציא מעבר להן)</div>
+        <ul class="small">
+          <li>בוגרת מסלול PRO בניצנים (י׳–י״ב): Python, Java, React, Git, SQL בסיסי.</li>
+          <li>בהאקתון ניצנים בנתה עם הצוות שלה את TutorMatch, אפליקציה שמתאימה חונכים מתנדבים לתלמידים: React, Firebase ו-Claude Code. הם כתבו בדיקות ועשו code review לקוד שה-AI יצר. בפיילוט בבית הספר השתמשו בה 120 תלמידים.</li>
+          <li>פרויקט אישי: מסווג תמונות ב-Python עם scikit-learn.</li>
+          <li>שנה אחת כמדריכה מתנדבת ב-Junior (כיתות ז׳–ח׳).</li>
+          <li>אין תואר. אין שנות ניסיון בתעשייה. אנגלית טובה.</li>
+          <li>GitHub: github.com/noa-tutor</li>
+        </ul>
+      </div>
+      <label class="p-label" for="cv-target">המשרה שאליה מגישים</label>
+      <select id="cv-target"></select>
+      <div class="cv-job" id="cv-job"></div>
+    </div>
+    <div class="cv-col cv-edit">
+      <textarea id="cv-text" spellcheck="false"></textarea>
+      <div class="cv-actions"><button class="btn-primary" id="cv-run">הרצת ATS</button><button class="link-btn" id="cv-reset">תבנית ריקה</button></div>
+    </div>
+    <div class="cv-col cv-out" id="cv-result"><div class="muted">התוצאה תופיע כאן. ה-ATS לא שולח מייל דחייה. כמו האמיתי.</div></div>
+  </div>
+</div></div>
+
+<!-- FINAL -->
+<div class="modal" id="final" hidden><div class="sheet">
+  <button class="icon-btn close" data-close aria-label="סגירה">×</button>
+  <h2 id="final-title"></h2><p id="final-prompt"></p>
+  <textarea id="final-text" rows="5" placeholder="Nitzanim graduate, 2030…"></textarea>
+  <p class="muted small">נשמר רק אצלכם. מעתיקים לפתק ומדביקים על הקיר.</p>
+</div></div>
+
+<!-- ABOUT -->
+<div class="modal" id="about" hidden><div class="sheet">
+  <button class="icon-btn close" data-close aria-label="סגירה">×</button>
+  <img class="about-logo" src="bu-logo.png" alt="BU">
+  <h2>מה זה BU Job Lab?</h2>
+  <p>לוח דמה לסדנת שיח אסטרטגי בבנתיבי אודי. זה לא אתר דרושים, ואי אפשר להגיש דרכו מועמדות (ניסינו, זה לא עזר).</p>
+  <p><b>רוב המודעות אמיתיות.</b> מודעות 2019–2021 נלקחו משרשורי "Ask HN: Who is hiring" ב-Hacker News, ומודעות 2026 מלוח Secret Tel Aviv Jobs. הטקסט נוסח מחדש וקוצר. שמות הכלים, שנות הניסיון ודרישות התואר נשמרו כמו במקור. כמה מודעות "רעש" נכתבו במיוחד לסדנה, עם שמות חברות בדויים.</p>
+  <p class="muted small">שמות החברות והסמלים שלהן מופיעים כי אלה המודעות שלהן. אין לנו קשר אליהן.</p>
+</div></div>
+
+<div class="modal" id="apply" hidden><div class="sheet sheet-sm">
+  <button class="icon-btn close" data-close aria-label="סגירה">×</button>
+  <h2>המועמדות נשלחה! 🎉</h2>
+  <p>קורות החיים שלך נשלחו ישר לחור השחור של המגייסים. בדיוק כמו בלוח אמיתי.</p>
+  <p class="muted">טיפ: במקום להגיש, תפתרו משימה. שם לפחות מישהו בודק.</p>
+  <button class="btn-primary" data-close>חזרה לחיפוש</button>
+</div></div>
+
+<div class="toast" id="toast" hidden></div>
+<script src="config.js"></script>
 <script src="data.js"></script>
+<script src="net.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ניהול משחק | BU Job Lab</title><meta name="robots" content="noindex"><link rel="icon" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Inter:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--he:"Assistant",Arial,sans-serif;--en:"Inter",Arial,sans-serif;--navy:#1F2A5C;--blue:#0A66C2;--line:#E3E1DC;--muted:#666}
+*{box-sizing:border-box}body{margin:0;font-family:var(--he);background:#F4F2EE;color:#191919;font-size:14px}
+header{background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:10px 24px}
+header img{height:40px}header h1{font-size:20px;margin:0}
+.who{margin-inline-start:auto;display:flex;align-items:center;gap:10px;color:var(--muted)}
+main{max-width:1200px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:360px 1fr;gap:20px;align-items:start}
+.card{background:#fff;border-radius:10px;box-shadow:0 0 0 1px rgba(0,0,0,.08);padding:18px}
+.card h2{margin:0 0 12px;font-size:17px}
+label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:12.5px;color:var(--muted);margin-bottom:10px}
+input,select{font:inherit;font-size:15px;color:#191919;padding:8px 10px;border:1px solid #999;border-radius:6px}
+.code-in{display:flex;gap:6px;direction:ltr}.code-in input{font-family:var(--en);font-weight:700;letter-spacing:2px}
+.code-in .d{flex:1;background:#F1F3F7}.code-in .l{width:70px;text-transform:uppercase}
+button{font:inherit;cursor:pointer;border-radius:999px;padding:7px 16px;font-weight:700;border:1px solid var(--blue);background:#fff;color:var(--blue)}
+button.primary{background:var(--blue);color:#fff}button.danger{border-color:#CC1016;color:#CC1016}
+button:disabled{opacity:.4;cursor:default}
+.ev{border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer}
+.ev.on{border-color:var(--blue);background:#EEF3FA}
+.ev b{font-family:var(--en);letter-spacing:1px}
+.badge{font-size:11.5px;font-weight:700;border-radius:4px;padding:1px 8px;margin-inline-start:6px}
+.b-draft{background:#EEE}.b-lobby{background:#FFF4DB;color:#6B4B00}.b-live{background:#D6F2E7;color:#0A5A42}.b-closed{background:#FDE2E2;color:#8A1C1C}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}
+.links{background:#F6F8FC;border-radius:8px;padding:10px 12px;font-family:var(--en);direction:ltr;text-align:left;font-size:13px;word-break:break-all}
+table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-size:12px}
+.big{font-family:var(--en);font-size:56px;font-weight:800;letter-spacing:6px;text-align:center;color:var(--navy)}
+.login{max-width:440px;margin:12vh auto;text-align:center}
+.muted{color:var(--muted)}.err{color:#CC1016}
+</style>
+</head>
+<body>
+<header><img src="bu-logo.png" alt="BU"><h1>ניהול משחק · ציד משרות</h1><div class="who" id="who"></div></header>
+<div id="app"></div>
+<script src="config.js"></script>
+<script src="data.js"></script>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const C = window.BU_CONFIG, CH = window.CHALLENGES;
+const $ = s => document.querySelector(s), esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const app = $("#app");
+if (!C.supabaseUrl) { app.innerHTML = `<div class="card login"><h2>עוד לא מחובר לשרת</h2><p class="muted">צריך למלא את config.js (Supabase URL ו-anon key).</p></div>`; throw 0; }
+const sb = createClient(C.supabaseUrl, C.supabaseAnonKey, { auth: { persistSession: true, storageKey: "bujl-admin" } });
+const base = location.origin + location.pathname.replace(/admin\.html$/, "");
+const today = () => { const d = new Date(); return [d.getDate(), d.getMonth() + 1, d.getFullYear() % 100].map(n => String(n).padStart(2, "0")).join(""); };
+const letters = () => Array.from({ length: 2 }, () => "ABCDEFGHJKLMNPQRSTUVWXYZ"[Math.floor(Math.random() * 24)]).join("");
+let sel = null, events = [];
+
+async function boot() {
+  const { data: { session } } = await sb.auth.getSession();
+  const u = session && session.user, gh = u && (u.user_metadata || {}).user_name;
+  if (!u || u.is_anonymous) {
+    app.innerHTML = `<div class="card login"><h2>כניסת מנחה</h2><p class="muted">רק חשבון GitHub מורשה יכול לפתוח משחקים.</p><button class="primary" id="gh">התחברות עם GitHub</button></div>`;
+    $("#gh").onclick = () => sb.auth.signInWithOAuth({ provider: "github", options: { redirectTo: location.href.split("#")[0] } });
+    return;
+  }
+  $("#who").innerHTML = `<span class="en">@${esc(gh)}</span><button id="out">יציאה</button>`;
+  $("#out").onclick = async () => { await sb.auth.signOut(); location.reload(); };
+  if ((gh || "").toLowerCase() !== (C.adminGithub || "").toLowerCase()) { app.innerHTML = `<div class="card login"><h2>אין הרשאה</h2><p class="muted">החשבון @${esc(gh)} לא מורשה לנהל משחקים.</p></div>`; return; }
+  app.innerHTML = `<main>
+    <div>
+      <div class="card"><h2>אירוע חדש</h2>
+        <label>שם האירוע<input id="t" value="ציד משרות · שיח אסטרטגי"></label>
+        <label>קוד (התאריך של היום + 2 אותיות)<div class="code-in"><input class="d" id="cd" value="${today()}" readonly><input class="l" id="cl" value="${letters()}" maxlength="2"></div></label>
+        <label>משך (דקות)<input id="dur" type="number" value="20" min="5" max="90"></label>
+        <button class="primary" id="create">יצירת אירוע</button> <span class="err" id="cerr"></span>
+      </div>
+      <div class="card" style="margin-top:16px"><h2>אירועים</h2><div id="evs"></div></div>
+    </div>
+    <div class="card" id="detail"><p class="muted">בחרו אירוע או צרו חדש.</p></div>
+  </main>`;
+  $("#create").onclick = create; await loadEvents(); setInterval(() => sel && loadDetail(), 4000);
+}
+async function create() {
+  const code = $("#cd").value + $("#cl").value.toUpperCase();
+  if (!/^\d{6}[A-Z]{2}$/.test(code)) return $("#cerr").textContent = "שתי אותיות באנגלית.";
+  const { data, error } = await sb.from("events").insert({ code, title: $("#t").value.trim() || "ציד משרות", duration_min: +$("#dur").value || 20, status: "lobby" }).select().single();
+  if (error) return $("#cerr").textContent = error.message.includes("duplicate") ? "הקוד תפוס. החליפו אותיות." : error.message;
+  sel = data.id; $("#cl").value = letters(); await loadEvents();
+}
+async function loadEvents() {
+  const { data } = await sb.from("events").select("*").order("created_at", { ascending: false }).limit(20); events = data || [];
+  $("#evs").innerHTML = events.map(e => `<div class="ev ${e.id === sel ? "on" : ""}" data-id="${e.id}"><b>${esc(e.code)}</b><span class="badge b-${e.status}">${e.status}</span><div class="muted">${esc(e.title)}</div></div>`).join("") || `<p class="muted">אין עדיין אירועים.</p>`;
+  document.querySelectorAll(".ev").forEach(el => el.onclick = () => { sel = el.dataset.id; loadEvents(); });
+  if (sel) loadDetail();
+}
+async function setStatus(st) {
+  const patch = { status: st }; if (st === "live") patch.started_at = new Date().toISOString();
+  await sb.from("events").update(patch).eq("id", sel); await loadEvents();
+}
+async function loadDetail() {
+  const e = events.find(x => x.id === sel); if (!e) return;
+  const { data: ps } = await sb.from("players").select("*").eq("event_id", sel).order("score", { ascending: false });
+  const players = ps || [];
+  $("#detail").innerHTML = `<h2>${esc(e.title)} <span class="badge b-${e.status}">${e.status}</span></h2>
+    <div class="big">${esc(e.code)}</div>
+    <div class="row">
+      <button ${e.status === "lobby" ? "disabled" : ""} data-st="lobby">פתיחת לובי</button>
+      <button class="primary" ${e.status === "live" ? "disabled" : ""} data-st="live">${e.started_at ? "התחלה מחדש של השעון" : "התחלת משחק ⏱"}</button>
+      <button class="danger" ${e.status === "closed" ? "disabled" : ""} data-st="closed">סגירה</button>
+    </div>
+    <div class="links">Players: ${esc(base)}?code=${esc(e.code)}<br>Leaderboard: <a href="${esc(base)}leaderboard.html?code=${esc(e.code)}" target="_blank">${esc(base)}leaderboard.html?code=${esc(e.code)}</a></div>
+    <h2 style="margin-top:18px">שחקנים (${players.length})</h2>
+    <table><thead><tr><th>שם מלא</th><th>כינוי</th><th>ניקוד</th><th>משימות מלאות</th><th>מודעות / חיפושים / 💡</th><th>עדכון</th><th></th></tr></thead><tbody>
+    ${players.map(p => { const s = p.stats || {}, full = CH.filter(c => (p.missions || {})[c.id] >= c.pts).length;
+      return `<tr><td>${esc(p.full_name)}</td><td>${esc(p.nickname)}</td><td><b>${p.score}</b></td><td>${full}/${CH.length}</td><td class="en">${s.opened || 0} / ${s.searches || 0} / ${s.lights || 0}</td><td class="muted">${new Date(p.updated_at).toLocaleTimeString("he-IL")}</td><td><button class="danger" data-del="${p.id}">הסרה</button></td></tr>`; }).join("")}
+    </tbody></table>`;
+  document.querySelectorAll("[data-st]").forEach(b => b.onclick = () => setStatus(b.dataset.st));
+  document.querySelectorAll("[data-del]").forEach(b => b.onclick = async () => { if (b.dataset.armed) { await sb.from("players").delete().eq("id", b.dataset.del); loadDetail(); } else { b.dataset.armed = 1; b.textContent = "בטוח?"; } });
+}
+sb.auth.onAuthStateChange(() => {}); boot();
+</script>
+</body>
+</html>
