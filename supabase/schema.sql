@@ -1,7 +1,6 @@
 -- BU Job Lab · Supabase schema
 -- Run once in Supabase → SQL Editor. Then enable: Auth → Providers → GitHub, and Auth → Anonymous sign-ins.
 
-create extension if not exists pgcrypto;
 
 -- Who may run the game (GitHub usernames). Edit if you add facilitators.
 create or replace function public.is_admin() returns boolean

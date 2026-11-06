@@ -12,3 +12,7 @@
 3. Auth → URL Configuration: להוסיף את כתובת ה-Pages ל-Redirect URLs.
 4. למלא `config.js` (URL + anon key).
 - שחקנים: `/?code=051126BU` · לידרבורד: `/leaderboard.html?code=…` · ניהול: `/admin.html` (כניסה עם GitHub).
+
+## בדיקות
+- `tests/schema.test.mjs`: מריץ את `supabase/schema.sql` על PGlite ובודק הרשאות, הצטרפות, דיווח ניקוד ולידרבורד (15 בדיקות).
+- `tests/e2e-multiplayer.mjs`: Playwright מקצה לקצה עם Supabase מדומה שמגובה ב-PGlite: מנחה פותח אירוע, שני שחקנים מצטרפים, START, ניקוד מלא וחלקי, לידרבורד חי (14 בדיקות).
