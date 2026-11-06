@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>מצגת · כניסה</title>
+<link rel="icon" href="../favicon.png">
+<style>
+html,body{margin:0;height:100%;background:#0B0D12;color:#fff;font-family:Assistant,Arial,sans-serif}
+.box{max-width:520px;margin:18vh auto 0;padding:32px 36px;background:#12151D;border:1px solid #262B38;border-radius:14px;text-align:center}
+h1{margin:0 0 6px;font-size:28px}.muted{opacity:.7;line-height:1.6}
+button,label.btn{display:inline-block;margin-top:18px;font:700 18px Assistant,Arial,sans-serif;background:#C8FF2E;color:#000;border:0;padding:12px 26px;border-radius:8px;cursor:pointer}
+button.ghost{background:transparent;color:#fff;border:1px solid #262B38;font-size:15px;padding:8px 16px}
+.bar{height:6px;background:#262B38;border-radius:6px;margin-top:18px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:#C8FF2E;transition:width .2s}
+.err{color:#FF8A80;margin-top:12px}
+</style>
+</head>
+<body>
+<div class="box" id="box"><h1>טוען…</h1></div>
+<script src="../config.js"></script>
+<script type="module">
+// Access gate: the deck itself is NOT in this repo. It lives in a private Supabase Storage bucket ("deck")
+// whose RLS lets only the admin's GitHub identity read it (supabase/deck-storage.sql).
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+const C = window.BU_CONFIG, box = document.getElementById("box"), FILE = "deck.html";
+const sb = createClient(C.supabaseUrl, C.supabaseAnonKey, { auth: { persistSession: true, storageKey: "bujl-deck-auth" } });
+const q = new URLSearchParams(location.search);
+const ui = h => box.innerHTML = h;
+
+function login() {
+  ui(`<h1>מצגת · שיח אסטרטגי</h1><div class="muted">גישה רק למשתמש GitHub מורשה.</div><button id="go">התחברות עם GitHub</button>`);
+  document.getElementById("go").onclick = () => sb.auth.signInWithOAuth({ provider: "github", options: { redirectTo: location.origin + location.pathname + location.search } });
+}
+function uploader(user, msg) {
+  ui(`<h1>העלאת המצגת</h1><div class="muted">${msg || ""}מחובר: <b>@${user}</b>. בוחרים את הקובץ deck.html. הוא נשמר בתיקייה פרטית שרק אתה רואה.</div>
+    <label class="btn">בחירת קובץ<input id="f" type="file" accept=".html,text/html" hidden></label><div class="err" id="e"></div>
+    <div><button class="ghost" id="out">יציאה</button></div>`);
+  document.getElementById("out").onclick = () => sb.auth.signOut().then(login);
+  document.getElementById("f").onchange = async e => {
+    const f = e.target.files[0]; if (!f) return;
+    ui(`<h1>מעלה…</h1><div class="muted">${(f.size / 1e6).toFixed(1)} MB</div>`);
+    const { error } = await sb.storage.from("deck").upload(FILE, f, { upsert: true, contentType: "text/html", cacheControl: "60" });
+    if (error) return uploader(user, `<span class="err">שגיאה: ${error.message}</span><br>`);
+    location.replace(location.pathname + location.hash);
+  };
+}
+let started = false;
+async function open(session) {
+  if (started) return; started = true;
+  const user = session.user.user_metadata?.user_name || session.user.email || "?";
+  if (q.has("upload")) { started = false; return uploader(user); }
+  ui(`<h1>פותח את המצגת…</h1><div class="muted">@${user}</div><div class="bar"><i id="p"></i></div>`);
+  const { data, error } = await sb.storage.from("deck").download(FILE);
+  if (error) {
+    const denied = /not found|Object not found|404|400/i.test(error.message || "") ;
+    if (denied) { started = false; return uploader(user, "עוד לא הועלתה מצגת, או שאין לחשבון הזה הרשאה. "); }
+    return ui(`<h1>שגיאה</h1><div class="err">${error.message}</div><button class="ghost" id="out">יציאה</button>`), (document.getElementById("out").onclick = () => sb.auth.signOut().then(login));
+  }
+  const html = await data.text();
+  document.open(); document.write(html); document.close();
+}
+const { data: { session } } = await sb.auth.getSession();
+if (session) open(session); else login();
+sb.auth.onAuthStateChange((ev, s) => { if (ev === "SIGNED_IN" && s && !document.getElementById("p")) open(s); });
+</script>
+</body>
+</html>

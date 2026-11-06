@@ -22,3 +22,8 @@
 1. `admin.html` → "מפתח מצגת" → יצירת מפתח חדש (נשמר בשרת רק כ-hash).
 2. במצגת: מקש K → הדבקה. המצגת קוראת ל-`host_open_event` / `host_set_status`, והלידרבורד נקרא מ-`leaderboard`.
 3. `tests/pgrest-standin.mjs`: שרת PostgREST מדומה על PGlite לבדיקות מקומיות.
+
+## המצגת הנעולה (`/deck/`)
+- התוכן לא נמצא ב-repo. הוא יושב ב-Supabase Storage, בתיקייה פרטית `deck`, וההרשאה בנויה על זהות ה-GitHub של המנהל (`supabase/deck-storage.sql`).
+- `deck/index.html`: התחברות GitHub → הורדת `deck.html` מהתיקייה הפרטית → הצגה. מי שאינו מורשה לא מקבל כלום.
+- העלאת גרסה חדשה: `/deck/?upload` → בחירת הקובץ.
