@@ -5,7 +5,7 @@ await db.exec(`create role anon; create role authenticated; create schema auth;
 create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true),'')::uuid $$;
 grant usage on schema auth to anon, authenticated;
 create function auth.jwt() returns jsonb language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claims', true),''),'{}')::jsonb $$;`);
-await db.exec(fs.readFileSync("/home/claude/deck/ctf/site/supabase/schema.sql", "utf8"));
+await db.exec(fs.readFileSync(new URL("../supabase/schema.sql", import.meta.url), "utf8"));
 await db.exec(`grant usage on schema public to anon, authenticated; grant all on all tables in schema public to anon, authenticated;`);
 await db.exec(`insert into host_secret(id,hash) values (1, encode(sha256(convert_to('test-host-key-1234567890','UTF8')),'hex'))`);
 let q = Promise.resolve();

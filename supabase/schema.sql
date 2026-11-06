@@ -4,8 +4,13 @@
 
 -- Who may run the game (GitHub usernames). Edit if you add facilitators.
 create or replace function public.is_admin() returns boolean
-language sql stable as $$
-  select coalesce(lower(auth.jwt() -> 'user_metadata' ->> 'user_name') in ('thisisaviram'), false)
+language sql stable security definer set search_path = public, auth as $$
+  -- identity_data comes from GitHub and cannot be edited by the user (user_metadata can).
+  select exists (
+    select 1 from auth.identities i
+    where i.user_id = auth.uid() and i.provider = 'github'
+      and lower(i.identity_data ->> 'user_name') in ('thisisaviram')
+  )
 $$;
 
 create table if not exists public.events (

@@ -1,20 +1,23 @@
 import { PGlite } from "@electric-sql/pglite";
 import fs from "fs";
 const db = new PGlite();
-const sql = fs.readFileSync("/home/claude/deck/ctf/site/supabase/schema.sql", "utf8");
+const sql = fs.readFileSync(new URL("../supabase/schema.sql", import.meta.url), "utf8");
 // Supabase shims: roles + auth schema reading claims from settings
 await db.exec(`
 create role anon; create role authenticated;
 create schema auth;
 create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub', true),'')::uuid $$;
 grant usage on schema auth to anon, authenticated;
+create table auth.identities (user_id uuid, provider text, identity_data jsonb);
 create function auth.jwt() returns jsonb language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claims', true),''),'{}')::jsonb $$;
 `);
 await db.exec(sql);
 await db.exec(`grant usage on schema public to anon, authenticated; grant all on all tables in schema public to anon, authenticated;`);
 let pass = 0, fail = 0;
 const ok = (c, m) => { if (c) { pass++; console.log("✓", m); } else { fail++; console.log("✗", m); } };
+const seen = new Set();
 async function as(uid, meta, fn) {
+  if (uid && meta && meta.user_name && !seen.has(uid)) { seen.add(uid); await db.query(`insert into auth.identities values ($1,'github',$2)`, [uid, JSON.stringify({ user_name: meta.user_name })]); }
   await db.exec(`reset role; select set_config('request.jwt.claim.sub', '${uid || ""}', false); select set_config('request.jwt.claims', '${JSON.stringify({ sub: uid, user_metadata: meta || {} })}', false); set role authenticated;`);
   try { return await fn(); } finally { await db.exec("reset role"); }
 }
@@ -57,6 +60,9 @@ try { await as(P1, {}, () => db.query(`select join_event('061126BU','late comer'
 await as(ADMIN, { user_name: "ThisIsAviram" }, () => db.query(`insert into events (code) values ('061126DR')`));
 r = await as(P1, {}, () => db.query(`select * from event_by_code('061126DR')`)); ok(r.rows.length === 0, "draft event hidden");
 
+// metadata spoofing must not grant admin
+r = await as(P1, {}, async () => { await db.query(`select set_config('request.jwt.claims', '${JSON.stringify({ sub: P1, user_metadata: { user_name: "ThisIsAviram" } })}', false)`); return db.query(`select public.is_admin() a`); });
+ok(r.rows[0].a === false, "spoofed user_metadata.user_name is not admin");
 // ── host key (deck control) ──
 const KEY = "deck-key-0123456789abcdef";
 try { await as(EVIL, { user_name: "hacker" }, () => db.query(`select set_host_secret('${KEY}')`)); ok(false, "non-admin cannot set host key"); } catch (e) { ok(/not admin/.test(e.message), "non-admin cannot set host key"); }
