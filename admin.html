@@ -71,10 +71,24 @@ async function boot() {
         <button class="primary" id="create">יצירת אירוע</button> <span class="err" id="cerr"></span>
       </div>
       <div class="card" style="margin-top:16px"><h2>אירועים</h2><div id="evs"></div></div>
+      <div class="card" style="margin-top:16px"><h2>מפתח מצגת</h2>
+        <p class="muted">מאפשר למצגת לפתוח אירוע, ללחוץ START ולסגור, בלי להתחבר ל-GitHub. יוצרים פעם אחת ומדביקים במצגת (מקש K). מפתח חדש מבטל את הקודם.</p>
+        <button id="hk">יצירת מפתח חדש</button> <span class="err" id="hkerr"></span>
+        <div id="hkout" class="en" style="margin-top:10px;word-break:break-all;font-size:18px"></div>
+      </div>
     </div>
     <div class="card" id="detail"><p class="muted">בחרו אירוע או צרו חדש.</p></div>
   </main>`;
-  $("#create").onclick = create; await loadEvents(); setInterval(() => sel && loadDetail(), 4000);
+  $("#create").onclick = create;
+  $("#hk").onclick = async () => {
+    const a = new Uint8Array(18); crypto.getRandomValues(a);
+    const key = "bu-" + Array.from(a, b => "abcdefghjkmnpqrstuvwxyz23456789"[b % 31]).join("");
+    const { error } = await sb.rpc("set_host_secret", { p_secret: key });
+    if (error) { $("#hkerr").textContent = error.message; return; }
+    $("#hkerr").textContent = ""; $("#hkout").innerHTML = `<b>${key}</b> <button id="hkc">העתקה</button><div class="muted" style="font-family:inherit;font-size:14px">שמרו אותו עכשיו. הוא לא יוצג שוב.</div>`;
+    $("#hkc").onclick = () => navigator.clipboard.writeText(key);
+  };
+  await loadEvents(); setInterval(() => sel && loadDetail(), 4000);
 }
 async function create() {
   const code = $("#cd").value + $("#cl").value.toUpperCase();

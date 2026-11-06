@@ -56,4 +56,27 @@ try { await as(P1, {}, () => db.query(`select join_event('061126BU','late comer'
 // draft events invisible
 await as(ADMIN, { user_name: "ThisIsAviram" }, () => db.query(`insert into events (code) values ('061126DR')`));
 r = await as(P1, {}, () => db.query(`select * from event_by_code('061126DR')`)); ok(r.rows.length === 0, "draft event hidden");
+
+// ── host key (deck control) ──
+const KEY = "deck-key-0123456789abcdef";
+try { await as(EVIL, { user_name: "hacker" }, () => db.query(`select set_host_secret('${KEY}')`)); ok(false, "non-admin cannot set host key"); } catch (e) { ok(/not admin/.test(e.message), "non-admin cannot set host key"); }
+try { await as(ADMIN, { user_name: "ThisIsAviram" }, () => db.query(`select set_host_secret('short')`)); ok(false, "short key rejected"); } catch (e) { ok(/too short/.test(e.message), "short key rejected"); }
+await as(ADMIN, { user_name: "ThisIsAviram" }, () => db.query(`select set_host_secret('${KEY}')`));
+r = await db.query(`select hash from host_secret`); ok(r.rows[0].hash.length === 64 && !r.rows[0].hash.includes("deck"), "only hash stored");
+await db.exec(`select set_config('request.jwt.claim.sub', '', false); select set_config('request.jwt.claims', '{}', false); set role anon`);
+try { await db.query(`select * from host_secret`); r = await db.query(`select * from host_secret`); ok(r.rows.length === 0, "anon cannot read host_secret"); } catch (e) { ok(true, "anon cannot read host_secret"); }
+try { await db.query(`select host_open_event('wrong-key-wrong-key-x','071126AB','t',12)`); ok(false, "wrong key rejected"); } catch (e) { ok(/bad host key/.test(e.message), "wrong key rejected"); }
+try { await db.query(`select host_open_event('${KEY}','07112AB','t',12)`); ok(false, "bad code rejected"); } catch (e) { ok(/bad code/.test(e.message), "bad code format rejected"); }
+r = await db.query(`select host_open_event('${KEY}','071126ab','שיח',10) as e`); ok(r.rows[0].e.status === "lobby" && r.rows[0].e.code === "071126AB" && r.rows[0].e.duration_min === 10, "host opens event in lobby");
+r = await db.query(`select host_open_event('${KEY}','071126AB','שיח',12) as e`); ok(r.rows[0].e.duration_min === 12, "reopen in lobby updates duration (idempotent)");
+r = await db.query(`select host_set_status('${KEY}','071126AB','live') as e`); ok(r.rows[0].e.status === "live" && r.rows[0].e.started_at, "host START sets clock");
+const st0 = r.rows[0].e.started_at;
+r = await db.query(`select host_set_status('${KEY}','071126AB','live',14) as e`); ok(r.rows[0].e.duration_min === 14 && r.rows[0].e.started_at === st0, "extend keeps clock, adds minutes");
+r = await db.query(`select host_set_status('${KEY}','071126AB','live',12) as e`);
+r = await db.query(`select host_open_event('${KEY}','071126AB','שיח',30) as e`); ok(r.rows[0].e.status === "live" && r.rows[0].e.duration_min === 12, "reopen while live keeps state");
+r = await db.query(`select host_set_status('${KEY}','071126AB','closed') as e`); ok(r.rows[0].e.status === "closed", "host closes");
+try { await db.query(`select host_set_status('${KEY}','071126AB','draft')`); ok(false, "bad status"); } catch (e) { ok(/bad status/.test(e.message), "bad status rejected"); }
+let upd = []; try { upd = (await db.query(`update events set status='live' returning id`)).rows; } catch (e) {}
+await db.exec("reset role");
+r = await db.query(`select status from events where code='071126AB'`); ok(upd.length === 0 && r.rows[0].status === "closed", "anon cannot update events directly");
 console.log(`\n${pass} passed, ${fail} failed`);

@@ -94,3 +94,66 @@ $$;
 
 grant execute on function public.event_by_code(text), public.join_event(text,text,text),
   public.report_progress(text,int,jsonb,jsonb), public.leaderboard(text) to anon, authenticated;
+
+-- ───────── Host key: run the game from the presentation without a GitHub login ─────────
+-- The admin sets a long random key once (admin.html → "מפתח מצגת"). The deck keeps it locally
+-- and uses it to open an event, START and close. Only its SHA-256 hash is stored.
+create table if not exists public.host_secret (
+  id int primary key default 1 check (id = 1),
+  hash text not null,
+  updated_at timestamptz not null default now()
+);
+alter table public.host_secret enable row level security;  -- no policies: reachable only via the functions below
+
+create or replace function public.set_host_secret(p_secret text)
+returns void language plpgsql security definer set search_path = public as $$
+begin
+  if not public.is_admin() then raise exception 'not admin'; end if;
+  if char_length(coalesce(p_secret, '')) < 16 then raise exception 'host key too short'; end if;
+  insert into host_secret (id, hash) values (1, encode(sha256(convert_to(p_secret, 'UTF8')), 'hex'))
+  on conflict (id) do update set hash = excluded.hash, updated_at = now();
+end $$;
+
+create or replace function public.host_ok(p_secret text)
+returns boolean language sql stable security definer set search_path = public as $$
+  select char_length(coalesce(p_secret, '')) >= 16
+     and exists (select 1 from host_secret where hash = encode(sha256(convert_to(p_secret, 'UTF8')), 'hex'))
+$$;
+
+-- Open (or reuse) today's event in lobby
+create or replace function public.host_open_event(p_secret text, p_code text, p_title text, p_duration int)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare c text := upper(trim(p_code)); ev events;
+begin
+  if not public.host_ok(p_secret) then raise exception 'bad host key'; end if;
+  if c !~ '^[0-9]{6}[A-Z]{2}$' then raise exception 'bad code'; end if;
+  insert into events (code, title, status, duration_min, owner)
+  values (c, coalesce(nullif(trim(p_title), ''), 'ציד משרות'), 'lobby', greatest(1, least(90, coalesce(p_duration, 12))), null)
+  on conflict (code) do update set
+    duration_min = case when events.status in ('draft', 'lobby') then excluded.duration_min else events.duration_min end,
+    status = case when events.status = 'draft' then 'lobby' else events.status end
+  returning * into ev;
+  return jsonb_build_object('code', ev.code, 'title', ev.title, 'status', ev.status, 'duration_min', ev.duration_min, 'started_at', ev.started_at, 'server_now', now());
+end $$;
+
+-- lobby / live (START, sets the clock) / closed
+create or replace function public.host_set_status(p_secret text, p_code text, p_status text, p_duration int default null)
+returns jsonb language plpgsql security definer set search_path = public as $$
+declare ev events;
+begin
+  if not public.host_ok(p_secret) then raise exception 'bad host key'; end if;
+  if p_status not in ('lobby', 'live', 'closed') then raise exception 'bad status'; end if;
+  update events set
+    status = p_status,
+    started_at = case when p_status = 'live' and status <> 'live' then now() when p_status = 'lobby' then null else started_at end,  -- live→live keeps the clock (extend)
+    duration_min = case when p_duration is null then duration_min else greatest(1, least(90, p_duration)) end
+  where code = upper(trim(p_code))
+  returning * into ev;
+  if not found then raise exception 'no such event'; end if;
+  return jsonb_build_object('code', ev.code, 'title', ev.title, 'status', ev.status, 'duration_min', ev.duration_min, 'started_at', ev.started_at, 'server_now', now());
+end $$;
+
+revoke execute on function public.host_ok(text) from public;
+grant execute on function public.host_ok(text), public.host_open_event(text,text,text,int),
+  public.host_set_status(text,text,text,int) to anon, authenticated;
+grant execute on function public.set_host_secret(text) to authenticated;

@@ -14,5 +14,11 @@
 - שחקנים: `/?code=051126BU` · לידרבורד: `/leaderboard.html?code=…` · ניהול: `/admin.html` (כניסה עם GitHub).
 
 ## בדיקות
-- `tests/schema.test.mjs`: מריץ את `supabase/schema.sql` על PGlite ובודק הרשאות, הצטרפות, דיווח ניקוד ולידרבורד (15 בדיקות).
+- `tests/schema.test.mjs`: מריץ את `supabase/schema.sql` על PGlite ובודק הרשאות, הצטרפות, דיווח ניקוד ולידרבורד (29 בדיקות, כולל מפתח מצגת).
 - `tests/e2e-multiplayer.mjs`: Playwright מקצה לקצה עם Supabase מדומה שמגובה ב-PGlite: מנחה פותח אירוע, שני שחקנים מצטרפים, START, ניקוד מלא וחלקי, לידרבורד חי (14 בדיקות).
+
+## הפעלה מתוך המצגת (מפתח מצגת)
+המצגת (HTML) יכולה לפתוח אירוע, ללחוץ START, להאריך ולסגור, בלי התחברות GitHub:
+1. `admin.html` → "מפתח מצגת" → יצירת מפתח חדש (נשמר בשרת רק כ-hash).
+2. במצגת: מקש K → הדבקה. המצגת קוראת ל-`host_open_event` / `host_set_status`, והלידרבורד נקרא מ-`leaderboard`.
+3. `tests/pgrest-standin.mjs`: שרת PostgREST מדומה על PGlite לבדיקות מקומיות.
