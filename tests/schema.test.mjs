@@ -73,6 +73,9 @@ await db.exec(`select set_config('request.jwt.claim.sub', '', false); select set
 try { await db.query(`select * from host_secret`); r = await db.query(`select * from host_secret`); ok(r.rows.length === 0, "anon cannot read host_secret"); } catch (e) { ok(true, "anon cannot read host_secret"); }
 try { await db.query(`select host_open_event('wrong-key-wrong-key-x','071126AB','t',12)`); ok(false, "wrong key rejected"); } catch (e) { ok(/bad host key/.test(e.message), "wrong key rejected"); }
 try { await db.query(`select host_open_event('${KEY}','07112AB','t',12)`); ok(false, "bad code rejected"); } catch (e) { ok(/bad code/.test(e.message), "bad code format rejected"); }
+r = await as(ADMIN, { user_name: "ThisIsAviram" }, () => db.query(`select host_open_event(null,'081126GH','שיח',10) as e`)); ok(r.rows[0].e.status === "lobby", "GitHub admin opens event without a deck key");
+try { await as(EVIL, { user_name: "hacker" }, () => db.query(`select host_set_status(null,'081126GH','live')`)); ok(false, "non-admin session without key rejected"); } catch (e) { ok(/bad host key/.test(e.message), "non-admin session without key rejected"); }
+await db.exec(`select set_config('request.jwt.claim.sub', '', false); select set_config('request.jwt.claims', '{}', false); set role anon`);
 r = await db.query(`select host_open_event('${KEY}','071126ab','שיח',10) as e`); ok(r.rows[0].e.status === "lobby" && r.rows[0].e.code === "071126AB" && r.rows[0].e.duration_min === 10, "host opens event in lobby");
 r = await db.query(`select host_open_event('${KEY}','071126AB','שיח',12) as e`); ok(r.rows[0].e.duration_min === 12, "reopen in lobby updates duration (idempotent)");
 r = await db.query(`select host_set_status('${KEY}','071126AB','live') as e`); ok(r.rows[0].e.status === "live" && r.rows[0].e.started_at, "host START sets clock");

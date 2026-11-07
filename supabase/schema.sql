@@ -130,7 +130,7 @@ create or replace function public.host_open_event(p_secret text, p_code text, p_
 returns jsonb language plpgsql security definer set search_path = public as $$
 declare c text := upper(trim(p_code)); ev events;
 begin
-  if not public.host_ok(p_secret) then raise exception 'bad host key'; end if;
+  if not (public.is_admin() or public.host_ok(p_secret)) then raise exception 'bad host key'; end if;  -- GitHub admin session OR deck key
   if c !~ '^[0-9]{6}[A-Z]{2}$' then raise exception 'bad code'; end if;
   insert into events (code, title, status, duration_min, owner)
   values (c, coalesce(nullif(trim(p_title), ''), 'ציד משרות'), 'lobby', greatest(1, least(90, coalesce(p_duration, 12))), null)
@@ -146,7 +146,7 @@ create or replace function public.host_set_status(p_secret text, p_code text, p_
 returns jsonb language plpgsql security definer set search_path = public as $$
 declare ev events;
 begin
-  if not public.host_ok(p_secret) then raise exception 'bad host key'; end if;
+  if not (public.is_admin() or public.host_ok(p_secret)) then raise exception 'bad host key'; end if;  -- GitHub admin session OR deck key
   if p_status not in ('lobby', 'live', 'closed') then raise exception 'bad status'; end if;
   update events set
     status = p_status,
