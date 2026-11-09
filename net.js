@@ -2,6 +2,7 @@
 (function () {
   const C = window.BU_CONFIG || {}; window.BU = window.BU || {};
   if (!C.supabaseUrl || !C.supabaseAnonKey) return;
+  if (new URLSearchParams(location.search).has("solo")) { document.documentElement.classList.add("solo"); return; } // self-run practice: local only, no code, no leaderboard
   const $ = s => document.querySelector(s);
   const store = { get(k, d) { try { const v = localStorage.getItem("bujl:" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem("bujl:" + k, JSON.stringify(v)); } catch (e) {} } };

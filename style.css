@@ -319,3 +319,5 @@ select{font:inherit;padding:7px 8px;border:1px solid #999;border-radius:6px;font
 .d-ad.he,.cmp-col.he .d-ad{direction:rtl;text-align:right;font-family:var(--he);font-size:15px}
 .d-ad.he ul{padding-left:0;padding-right:20px}
 .tile[data-mission="cv"]{grid-column:span 3}.tile[data-mission="cv"] .t-name{min-height:0}
+
+.solo-badge{display:none}.solo .solo-badge{display:inline-block;margin-inline-start:10px;font-size:12px;padding:3px 10px;border-radius:99px;background:#85D9FF;color:#062F6A;font-weight:600}
