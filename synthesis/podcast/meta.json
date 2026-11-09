@@ -1,0 +1,304 @@
+{
+"chapters": [
+{
+"t": 0.0,
+"title": "Opening"
+},
+{
+"t": 74.6,
+"title": "Axis one: professions"
+},
+{
+"t": 183.1,
+"title": "Axis two: pace and radius"
+},
+{
+"t": 276.3,
+"title": "Axis three: meaningful skills"
+},
+{
+"t": 352.2,
+"title": "The Israeli lens"
+},
+{
+"t": 436.7,
+"title": "Discussion windows"
+},
+{
+"t": 476.2,
+"title": "Three framings"
+},
+{
+"t": 529.7,
+"title": "Closing"
+}
+],
+"lines": [
+{
+"t": 0.0,
+"s": "H",
+"x": "Welcome. This is the audio version of a synthesis called Who builds the future? I'm here with the person who walked through the research behind it. Before we start, what is this, and what is it not?"
+},
+{
+"t": 11.8,
+"s": "G",
+"x": "It's a year of reading on AI, work and technology education, about a hundred and ninety sources, organised to support a discussion. It was built at Be'Netivei Udi, for a strategic conversation about youth technology education in Israel. And it's deliberately not a recommendation. It maps what we know and lays out the questions worth arguing about."
+},
+{
+"t": 36.7,
+"s": "H",
+"x": "So no answers today."
+},
+{
+"t": 38.6,
+"s": "G",
+"x": "No answers. Good questions, and the evidence behind them. Every number we mention is a snapshot, and forecasts in this field have been wrong in both directions."
+},
+{
+"t": 49.6,
+"s": "H",
+"x": "Then let's start with the shape of it."
+},
+{
+"t": 51.8,
+"s": "G",
+"x": "Everything we gathered falls on three axes. The first is professions shifting. The second is the pace of change and how far its effects reach. The third is a return to meaningful skills. They feed each other. The speed of the tools changes jobs, and both push education back toward skills that outlast any single tool."
+},
+{
+"t": 74.6,
+"s": "H",
+"x": "Axis one. Is AI taking software jobs?"
+},
+{
+"t": 78.0,
+"s": "G",
+"x": "The clearest signal is not that software jobs disappear. It's that the first rung of the ladder changes shape. A Stanford study found employment for twenty-two to twenty-five year olds in AI-exposed occupations fell about thirteen percent relative to older workers in the same jobs. Meanwhile, the share of job ads asking for AI skills roughly doubled in a year, from nine to nineteen percent."
+},
+{
+"t": 104.9,
+"s": "H",
+"x": "And that's causal?"
+},
+{
+"t": 106.4,
+"s": "G",
+"x": "No. It's descriptive. Interest rates, the post-pandemic correction and AI all move together. A rise in ads isn't yet a rise in hiring. But the direction shows up in many places."
+},
+{
+"t": 119.9,
+"s": "H",
+"x": "You also looked inside an AI company."
+},
+{
+"t": 122.6,
+"s": "G",
+"x": "Anthropic published an analysis of its own workforce in October. Junior roles fell from about twenty-one to fourteen percent of technical staff, and from twenty-seven to nine percent of technical hires. By August, AI agents worked about six hours for every employee hour. And hiring managers increasingly talked about autonomy and judgment, and less about narrow domain expertise."
+},
+{
+"t": 149.0,
+"s": "H",
+"x": "That's one company at the frontier, though."
+},
+{
+"t": 151.5,
+"s": "G",
+"x": "Exactly, and the authors say so themselves. But they name a tension that matters for education. As people automate their own work, some are being removed from the hands-on work that originally built their skills."
+},
+{
+"t": 166.0,
+"s": "H",
+"x": "Which leads to a question."
+},
+{
+"t": 167.9,
+"s": "G",
+"x": "If employers weigh judgment over implementation, how do young people build judgment when the implementation work that used to train it is done by agents? And what does ready for a first job even mean in twenty twenty-eight?"
+},
+{
+"t": 183.1,
+"s": "H",
+"x": "Axis two. Pace."
+},
+{
+"t": 185.0,
+"s": "G",
+"x": "The research group METR measures how long a task an AI system can complete on its own. That length has been doubling about every four point three months. In twenty twenty-two it was around thirty seconds of expert work. By May this year, it was at least sixteen hours."
+},
+{
+"t": 203.6,
+"s": "H",
+"x": "And schools update a syllabus once a year."
+},
+{
+"t": 206.3,
+"s": "G",
+"x": "Right. If you run the numbers, in one school year at that pace, tool capability grows roughly seven times. One curriculum cycle, seven times the capability. That's a calculation from a trend, not a law, but it explains why planning feels so hard."
+},
+{
+"t": 224.2,
+"s": "H",
+"x": "And the cost?"
+},
+{
+"t": 225.5,
+"s": "G",
+"x": "The same capability got about two hundred and eighty times cheaper in two years. Yet total spending keeps rising, because usage grows even faster."
+},
+{
+"t": 236.3,
+"s": "H",
+"x": "You also brought in Yuval Noah Harari."
+},
+{
+"t": 239.1,
+"s": "G",
+"x": "As a lens, not as evidence. In an interview with Czech public television he compared us to cows. Cows can see the farmer, but they have no idea money exists, and the bond market still decides their lives. His worry is that AI quietly takes over financial and bureaucratic systems that we live inside but can no longer understand."
+},
+{
+"t": 262.6,
+"s": "H",
+"x": "So the question there is..."
+},
+{
+"t": 264.4,
+"s": "G",
+"x": "If the tool changes several times inside one school year, what is stable enough to teach? And who is responsible for understanding systems nobody fully built?"
+},
+{
+"t": 276.3,
+"s": "H",
+"x": "Axis three. Does AI help students learn?"
+},
+{
+"t": 279.3,
+"s": "G",
+"x": "It depends on design, more than on the model. A Harvard physics study used a tutor built on active-learning principles and found large gains. A World Bank program in Nigeria, with teachers guiding the AI, found solid gains in six weeks. But a two-year AI tutor in middle schools showed almost no effect beyond regular practice, mostly because students didn't use it."
+},
+{
+"t": 304.9,
+"s": "H",
+"x": "And there was a study where it hurt."
+},
+{
+"t": 306.9,
+"s": "G",
+"x": "High school maths students who practised with an open chatbot did about seventeen percent worse on a test without AI. Students with a tutor designed to ask questions instead of giving answers showed no drop. Same technology, different design."
+},
+{
+"t": 324.7,
+"s": "H",
+"x": "Is there a counter-trend?"
+},
+{
+"t": 326.5,
+"s": "G",
+"x": "Yes. As machines get stronger, what's human, physical and verified gains value. UNESCO reports most education systems now restrict phones in school. Handwritten exams and in-person interviews are coming back."
+},
+{
+"t": 342.8,
+"s": "H",
+"x": "And the question?"
+},
+{
+"t": 344.3,
+"s": "G",
+"x": "What must a learner be able to do without AI? And how do we know someone understands, and isn't just producing?"
+},
+{
+"t": 352.2,
+"s": "H",
+"x": "Let's come home. What has Israel's education system actually decided?"
+},
+{
+"t": 357.0,
+"s": "G",
+"x": "Quite a lot, in a short time. The Ministry of Education set a target of eighty percent of pupils from fourth grade up with basic AI competence. AI units are being woven into middle-school computer science. And there's a new, selective high-school major for AI scientists, about fifty schools in its first stage, with maths and science requirements."
+},
+{
+"t": 380.9,
+"s": "H",
+"x": "So there's something for everyone, and something for the strongest."
+},
+{
+"t": 384.5,
+"s": "G",
+"x": "And that's where the discussion found a gap. We called it the missing middle. Universal literacy reaches everyone at a basic level. The major reaches a selected few at depth. What most technologically able teenagers get, especially outside the strongest schools, and who teaches them, hasn't been described yet. To be clear, that's a reading of public documents, not a measured result."
+},
+{
+"t": 409.9,
+"s": "H",
+"x": "And the market around it?"
+},
+{
+"t": 411.6,
+"s": "G",
+"x": "Hi-tech workers rose from four to eleven percent of all registered job seekers. Computer science enrollment at universities fell about seven percent. And the share of eighteen to twenty-four year olds who are not working or studying rose from seventeen to twenty percent, while the OECD average fell. None of that is tied causally to AI. It's context."
+},
+{
+"t": 436.7,
+"s": "H",
+"x": "In the room, people argued. About what?"
+},
+{
+"t": 439.5,
+"s": "G",
+"x": "We used windows, short pauses with two positions held on purpose. One was a maths teacher who builds a working app for her class in a weekend, without writing code. What does someone who studied technology know that she doesn't, and what does she know that they don't?"
+},
+{
+"t": 457.1,
+"s": "H",
+"x": "Another?"
+},
+{
+"t": 458.2,
+"s": "G",
+"x": "Equity. When the professional bar rises, who are we prepared to leave behind? Timing: do programs change before the employer asks, or hold today's bar? And foundations: code without AI until thinking is built, or AI from day one?"
+},
+{
+"t": 476.2,
+"s": "H",
+"x": "Underneath all of that, you describe three framings."
+},
+{
+"t": 479.4,
+"s": "G",
+"x": "When people say AI education, they mean one of three things. Framing A: teach working with AI, using it well and knowing when not to. Framing B: teach the science of AI, how models learn and the maths underneath. Framing C: teach the capacity to adapt, decomposing problems, judging output, learning the next tool."
+},
+{
+"t": 502.2,
+"s": "H",
+"x": "And which one is right?"
+},
+{
+"t": 503.9,
+"s": "G",
+"x": "The page doesn't choose. Every real program mixes all three. The disagreement is about proportions and order. For whom? A selective pipeline and a program for every teenager may need opposite mixes. In what order? Foundations first, or the tool as the way into foundations? And measured how? If adaptability can't be assessed, will it survive the first budget review?"
+},
+{
+"t": 529.7,
+"s": "H",
+"x": "If a listener wants to feel this rather than hear about it?"
+},
+{
+"t": 533.0,
+"s": "G",
+"x": "At the bottom of the page there's a twelve-minute game you can play alone. A job board of thirty real ads, some from twenty nineteen to twenty twenty-one and some from this year, with the dates removed. You hunt for what changed. The interface is in Hebrew, the ads in English."
+},
+{
+"t": 551.7,
+"s": "H",
+"x": "And one question to leave with?"
+},
+{
+"t": 553.8,
+"s": "G",
+"x": "What must a graduate be able to do without AI? On purpose, it has more than one good answer."
+},
+{
+"t": 560.8,
+"s": "H",
+"x": "Thanks for listening. The full synthesis, with sources, figures and the game, is on the page."
+}
+],
+"dur": 566.7
+}

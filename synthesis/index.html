@@ -40,6 +40,26 @@ h1 em{font-style:italic;color:var(--ember)}
 .stat b{display:block;font:400 34px/1 var(--serif);color:var(--ink)}
 .stat span{font-size:13px;color:var(--mute);line-height:1.4;display:block;margin-top:6px}
 
+
+/* listen */
+.listen{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--ink);color:#fff;border-radius:18px;padding:18px 20px;margin:0 0 22px}
+.lp-btn{width:56px;height:56px;border-radius:50%;border:0;background:var(--ember);color:#fff;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:transform .15s,background .15s}
+.lp-btn:hover{transform:scale(1.05);background:#4D6BFF}
+.lp-k{font:500 11px var(--mono);letter-spacing:.1em;color:#85D9FF}
+.lp-t{font:400 19px/1.3 var(--serif);margin:2px 0 8px}
+.lp-bar{position:relative;height:6px;border-radius:3px;background:rgba(255,255,255,.18);cursor:pointer}
+.lp-fill{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:3px;background:#85D9FF}
+.lp-marks i{position:absolute;top:-3px;width:2px;height:12px;background:rgba(255,255,255,.45)}
+.lp-meta{display:flex;justify-content:space-between;gap:10px;font:400 12.5px var(--mono);color:#B9C3D8;margin-top:8px;flex-wrap:wrap}
+.lp-meta button{background:none;border:0;color:#85D9FF;font:inherit;cursor:pointer;padding:0}
+.lp-panel{display:none;grid-column:1/-1;border-top:1px solid rgba(255,255,255,.14);padding-top:14px;margin-top:4px}
+.lp-panel.on{display:grid;grid-template-columns:220px 1fr;gap:20px}
+.lp-ch{list-style:none;padding:0;margin:0;font-size:13.5px}
+.lp-ch li{padding:5px 0;cursor:pointer;color:#C9CDE0}.lp-ch li.on{color:#fff;font-weight:600}.lp-ch li span{font:400 11.5px var(--mono);color:#8A93AE;margin-right:8px}
+.lp-tx{max-height:260px;overflow:auto;font-size:14px;line-height:1.6;padding-right:8px}
+.lp-tx p{margin:0 0 10px;color:#9AA6C0;cursor:pointer}.lp-tx p.on{color:#fff}.lp-tx b{font:500 11px var(--mono);letter-spacing:.06em;margin-right:6px}
+.lp-tx p[data-s="H"] b{color:#F4AC78}.lp-tx p[data-s="G"] b{color:#85D9FF}
+@media (max-width:700px){.lp-panel.on{grid-template-columns:1fr}}
 /* page map */
 .map{margin:56px auto 10px}
 .map-h{font:500 12px var(--mono);letter-spacing:.08em;color:var(--ember);margin:0 0 14px}
@@ -218,6 +238,17 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   <h1>Who builds the <em>future?</em></h1>
   <p class="lede">A year of research on AI, work and technology education, organised to support a discussion, not to end one. It maps what is known, shows where Israel’s education system stands, and lays out the questions worth arguing about. It does not answer them.</p>
   <div class="credit"><img src="bu-logo.png" alt="BU. Be the Future You. By BeNetivei Udi" width="96" height="46"><p>Research and synthesis by <b>Aviram Weisberg</b>, developed at <b>Be’Netivei Udi (BU)</b> for a strategic discussion on the future of youth technology education in Israel.</p></div>
+  <div class="listen" id="listen">
+    <button class="lp-btn" id="lp-btn" type="button" aria-label="Play the audio version">▶</button>
+    <div>
+      <div class="lp-k">LISTEN · AUDIO VERSION</div>
+      <div class="lp-t">The synthesis as a two-voice conversation</div>
+      <div class="lp-bar" id="lp-bar"><div class="lp-fill" id="lp-fill"></div><div class="lp-marks" id="lp-marks"></div></div>
+      <div class="lp-meta"><span id="lp-time">0:00 / —</span><span id="lp-ch">Opening</span><button type="button" id="lp-more">Chapters &amp; transcript ▾</button></div>
+    </div>
+    <div class="lp-panel" id="lp-panel"><ul class="lp-ch" id="lp-chs"></ul><div class="lp-tx" id="lp-tx"></div></div>
+    <audio id="lp-audio" src="podcast/who-builds-the-future.mp3" preload="metadata"></audio>
+  </div>
   <div class="stats rv">
     <div class="stat"><b>~190</b><span>sources read and sorted</span></div>
     <div class="stat"><b>3</b><span>axes that organise them</span></div>
@@ -688,6 +719,31 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove("on")); const a = map.get(e.target.id); if (a) a.classList.add("on"); } }), { rootMargin: "-20% 0px -70% 0px" });
     map.forEach((a, id) => { const el = document.getElementById(id); if (el) so.observe(el); });
   } else document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
+
+  /* audio version */
+  (() => {
+    const au = document.getElementById("lp-audio"), b = document.getElementById("lp-btn"), fill = document.getElementById("lp-fill"), bar = document.getElementById("lp-bar"),
+      tm = document.getElementById("lp-time"), chl = document.getElementById("lp-ch"), more = document.getElementById("lp-more"), panel = document.getElementById("lp-panel");
+    let M = null; const fmt = x => { x = Math.max(0, Math.floor(x || 0)); return Math.floor(x / 60) + ":" + String(x % 60).padStart(2, "0"); };
+    fetch("podcast/meta.json").then(r => r.json()).then(m => { M = m;
+      document.getElementById("lp-chs").innerHTML = m.chapters.map((c, i) => '<li data-t="' + c.t + '"><span>' + fmt(c.t) + '</span>' + c.title + '</li>').join("");
+      document.getElementById("lp-tx").innerHTML = m.lines.map(l => '<p data-t="' + l.t + '" data-s="' + l.s + '"><b>' + (l.s === "H" ? "HOST" : "GUIDE") + '</b>' + l.x.replace(/&/g, "&amp;").replace(/</g, "&lt;") + '</p>').join("");
+      document.getElementById("lp-marks").innerHTML = m.chapters.slice(1).map(c => '<i style="left:' + (100 * c.t / m.dur) + '%"></i>').join("");
+      tm.textContent = "0:00 / " + fmt(m.dur); }).catch(() => {});
+    b.addEventListener("click", () => au.paused ? au.play() : au.pause());
+    au.addEventListener("play", () => { b.textContent = "❚❚"; b.setAttribute("aria-label", "Pause"); });
+    au.addEventListener("pause", () => { b.textContent = "▶"; b.setAttribute("aria-label", "Play the audio version"); });
+    bar.addEventListener("click", e => { const r = bar.getBoundingClientRect(), d = au.duration || (M && M.dur); if (d) { au.currentTime = d * (e.clientX - r.left) / r.width; if (au.paused) au.play(); } });
+    more.addEventListener("click", () => { const on = panel.classList.toggle("on"); more.textContent = on ? "Chapters & transcript ▴" : "Chapters & transcript ▾"; });
+    panel.addEventListener("click", e => { const el = e.target.closest("[data-t]"); if (el) { au.currentTime = +el.dataset.t; au.play(); } });
+    let last = -1;
+    au.addEventListener("timeupdate", () => { const d = au.duration || (M && M.dur) || 1, t = au.currentTime; fill.style.width = (100 * t / d) + "%"; tm.textContent = fmt(t) + " / " + fmt(d);
+      if (!M) return; let ci = 0; M.chapters.forEach((c, i) => { if (t >= c.t) ci = i; }); chl.textContent = M.chapters[ci].title;
+      document.querySelectorAll("#lp-chs li").forEach((li, i) => li.classList.toggle("on", i === ci));
+      let li2 = 0; M.lines.forEach((l, i) => { if (t >= l.t) li2 = i; });
+      if (li2 !== last) { last = li2; const ps = document.querySelectorAll("#lp-tx p"); ps.forEach((p, i) => p.classList.toggle("on", i === li2));
+        if (panel.classList.contains("on") && ps[li2]) { const tx = document.getElementById("lp-tx"); tx.scrollTo({ top: ps[li2].offsetTop - tx.offsetTop - 60, behavior: "smooth" }); } } });
+  })();
   const btn = document.getElementById("play-here"), fr = document.getElementById("game-frame");
   /* The game is laid out for a fixed 1440×900 desktop screen: render it at that size and scale it to fit, instead of letting it fall into its narrow layout. */
   const fit = () => { const f = fr.querySelector("iframe"); if (f && fr.clientWidth) f.style.transform = "scale(" + fr.clientWidth / 1440 + ")"; };
