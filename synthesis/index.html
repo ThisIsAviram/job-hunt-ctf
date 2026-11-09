@@ -8,25 +8,23 @@
 <meta property="og:title" content="Who builds the future? A synthesis">
 <meta property="og:description" content="Three axes, an Israeli lens, three ways to frame the question, and a game you can play yourself.">
 <link rel="stylesheet" href="/static/fonts.css">
+<link rel="stylesheet" href="/static/main.css">
+<link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
 <style>
 :root{--paper:#F6EFE7;--sand:#EFE7DB;--lilac-soft:#ECE8F5;--sky:#E3F4FB;--card:#FFFCF7;--ink:#171B2B;--ink-2:#3A3F52;--mute:#62647A;--line:#E5DED2;--line-2:#CFC8B8;--ember:#244CFF;--ember-ink:#1B39C7;--ember-soft:#E6EBFF;--apricot:#F4AC78;--apricot-soft:#FCE6D6;--lilac:#DDD7EE;--red:#C8102E;--navy:#062F6A;
 --serif:"Newsreader","Frank Ruhl",Georgia,serif;--sans:"Inter","Heebo",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--w:1240px}
 *{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.75 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-a{color:var(--ember-ink);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:var(--ink)}
+main a{color:var(--ember-ink);text-underline-offset:3px;text-decoration-thickness:1px}a:hover{color:var(--ink)}
 ::selection{background:var(--ember);color:#fff}
 .wrap{max-width:var(--w);margin:0 auto;padding:0 20px}
-.top{position:sticky;top:0;z-index:20;background:rgba(246,239,231,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top-in{display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{font:500 13px var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--ink);text-decoration:none}
-.nav{display:flex;gap:28px}.nav a{font:400 15px var(--sans);color:var(--ink);text-decoration:none}.nav a[aria-current]{border-bottom:2px solid var(--ink);padding-bottom:4px}.nav .nav-cta{color:var(--ember)}
-.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--ember)}
+.top{position:sticky}.progress{position:absolute;left:0;bottom:-1px;height:2px;width:100%;transform-origin:0 50%;transform:scaleX(0);background:var(--ember)}
 .col{max-width:780px;margin:0 auto;padding:0 20px}
 .wide{max-width:1080px;margin:0 auto;padding:0 20px}
-.back{display:inline-block;margin-top:44px;font:400 14px var(--sans);color:var(--mute);text-decoration:none}
+.syn-back{display:inline-block;margin-top:44px;font:400 14px var(--sans);color:var(--mute);text-decoration:none}
 
 /* hero */
-.hero{padding:0 0 40px}
+.syn-hero{padding-bottom:40px}
 .kicker{margin:36px 0 12px;font:500 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
 h1{font:400 clamp(48px,7vw,86px)/1.02 var(--serif);margin:0 0 24px;letter-spacing:-.015em}
 h1 em{font-style:italic;color:var(--ember)}
@@ -121,16 +119,16 @@ td.src a,figcaption a{color:inherit;text-decoration:underline;text-decoration-co
 .map-note{font-size:14px;color:var(--mute);margin:12px 0 0}
 
 /* side toc */
-.toc{position:fixed;left:24px;top:100px;width:176px;font-size:13px;display:none;z-index:5;max-height:calc(100vh - 130px);overflow:auto}
-.toc a{display:block;color:var(--mute);text-decoration:none;padding:6px 0 6px 14px;border-left:2px solid var(--line);line-height:1.35;transition:color .2s,border-color .2s}.toc a:hover{color:var(--ink)}
-.toc a b{font:500 11px var(--mono);color:var(--ember);margin-right:6px}.toc a.on{color:var(--ink);border-left-color:var(--ember);font-weight:500}
-.toc .tk{font:500 11px var(--mono);letter-spacing:.08em;color:var(--mute);margin:0 0 8px 14px}
-@media (min-width:1180px){.toc{display:block}main,footer{padding-left:200px}}
-@media (min-width:1700px){.toc{left:calc((100vw - 1080px)/2 - 230px)}main,footer{padding-left:0}}
+.syn-toc{position:fixed;left:24px;top:100px;width:176px;font-size:13px;display:none;z-index:5;max-height:calc(100vh - 130px);overflow:auto}
+.syn-toc a{display:block;color:var(--mute);text-decoration:none;padding:6px 0 6px 14px;border-left:2px solid var(--line);line-height:1.35;transition:color .2s,border-color .2s}.syn-toc a:hover{color:var(--ink)}
+.syn-toc a b{font:500 11px var(--mono);color:var(--ember);margin-right:6px}.syn-toc a.on{color:var(--ink);border-left-color:var(--ember);font-weight:500}
+.syn-toc .tk{font:500 11px var(--mono);letter-spacing:.08em;color:var(--mute);margin:0 0 8px 14px}
+@media (min-width:1180px){.syn-toc{display:block}main,.foot{padding-left:200px}}
+@media (min-width:1700px){.syn-toc{left:calc((100vw - 1080px)/2 - 230px)}main,.foot{padding-left:0}}
 
 /* headings */
 h2{font:400 clamp(32px,4vw,42px)/1.15 var(--serif);margin:96px 0 16px;letter-spacing:-.005em}
-h2 .n{font:500 12.5px var(--mono);color:var(--ember);display:block;letter-spacing:.1em;margin-bottom:10px}
+h2 .syn-n{font:500 12.5px var(--mono);color:var(--ember);display:block;letter-spacing:.1em;margin-bottom:10px}
 h3{font:600 13px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin:44px 0 12px}
 p{margin:0 0 18px}
 .lead2{font:400 20px/1.55 var(--serif);color:var(--ink-2)}
@@ -223,9 +221,9 @@ figure.viz figcaption b{color:var(--ink);font-weight:600}
 .gcell{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:12px 14px}
 .gcell b{display:block;font:400 26px/1 var(--serif);color:#fff}.gcell span{font-size:12.5px;color:#B9C3D8;line-height:1.4;display:block;margin-top:6px}
 .btns{display:flex;flex-wrap:wrap;gap:10px;position:relative}
-.btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--sans);text-decoration:none;padding:12px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.4);color:#fff;background:transparent;cursor:pointer}
-.btn:hover{background:rgba(255,255,255,.1);color:#fff}
-.btn.primary{background:#85D9FF;border-color:#85D9FF;color:var(--navy)}.btn.primary:hover{background:#fff;border-color:#fff;color:var(--navy)}
+.syn-btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--sans);text-decoration:none;padding:12px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.4);color:#fff;background:transparent;cursor:pointer}
+.syn-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+.syn-btn.primary{background:#85D9FF;border-color:#85D9FF;color:var(--navy)}.syn-btn.primary:hover{background:#fff;border-color:#fff;color:var(--navy)}
 .game-frame{display:none;margin-top:22px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#0B0F1A;position:relative;aspect-ratio:1440/900;width:100%}
 .game-frame.on{display:block}.game-frame iframe{position:absolute;left:0;top:0;width:1440px;height:900px;border:0;display:block;transform-origin:0 0}
 .game small{display:block;color:#9AA6C0;margin-top:14px;font-size:12.5px;position:relative}
@@ -256,8 +254,6 @@ figure.viz figcaption b{color:var(--ink);font-weight:600}
 .refs{font-size:13.5px;line-height:1.6;color:var(--ink-2);padding:0;list-style:none;columns:2;column-gap:36px}
 .refs li{margin-bottom:9px;break-inside:avoid;padding-left:14px;position:relative}.refs li::before{content:"";position:absolute;left:0;top:9px;width:5px;height:5px;border-radius:50%;background:var(--line-2)}
 .refs-h{font:600 11.5px var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:26px 0 10px}
-footer{margin:100px 0 0;border-top:1px solid var(--line);padding:30px 0 50px;font-size:14px;color:var(--mute)}
-footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 .totop{position:fixed;right:20px;bottom:20px;width:44px;height:44px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;text-decoration:none;font-size:18px;opacity:0;pointer-events:none;transition:opacity .3s;z-index:15}
 .totop.on{opacity:1;pointer-events:auto}.totop:hover{background:var(--ember);color:#fff}
 
@@ -265,23 +261,36 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}*{transition:none!important}}
 @media (max-width:980px){.flow{grid-template-columns:repeat(3,1fr);row-gap:10px}.flow a,.flow a:first-child,.flow a:last-child{border-radius:12px;margin-left:0}.flow a::after{display:none}.flow{gap:10px}}
 @media (max-width:900px){.axes,.qgrid,.answers,.kit{grid-template-columns:1fr}.comic{grid-template-columns:repeat(2,1fr)}.nav{gap:16px}.signals td.src{display:none}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.game-grid{grid-template-columns:repeat(2,1fr)}.org{grid-template-columns:1fr}.org img{max-width:220px}.refs{columns:1}.layer{flex-direction:column;align-items:flex-start;gap:6px}}
-@media (max-width:520px){.comic{grid-template-columns:1fr}.nav a:not(.nav-cta){display:none}.flow{grid-template-columns:repeat(2,1fr)}.credit{flex-direction:column;align-items:flex-start}.game{padding:24px}}
-@media print{.top,.toc,.totop,.game .btns,.game-frame,.talk,.progress{display:none!important}body{background:#fff;font-size:12pt}.rv{opacity:1;transform:none}figure.viz,.ans,.qcard,.panel{break-inside:avoid}a{color:inherit}}
+@media (max-width:520px){.comic{grid-template-columns:1fr}.flow{grid-template-columns:repeat(2,1fr)}.credit{flex-direction:column;align-items:flex-start}.game{padding:24px}}
+@media print{.top,.syn-toc,.totop,.game .btns,.game-frame,.talk,.progress{display:none!important}body{background:#fff;font-size:12pt}.rv{opacity:1;transform:none}figure.viz,.ans,.qcard,.panel{break-inside:avoid}a{color:inherit}}
+
+.top .nav a{color:var(--ink)}.top .nav .nav-cta{color:var(--ember)}
 </style>
 </head>
 <body>
-<header class="top"><div class="wrap top-in">
-  <a class="brand" href="/" aria-label="Aviram Weisberg">Aviram Weisberg</a>
-  <nav class="nav" aria-label="Main"><a href="/work/">Work</a><a href="/lab/" aria-current="page">Perspectives</a><a href="/about/">About</a><a class="nav-cta" href="https://calendar.app.google/bDE77A7Af282fTHZ9" rel="noopener">Let’s talk</a></nav>
-</div><div class="progress" id="progress"></div></header>
+<a class="skip" href="#main">Skip to content</a>
+<span class="top-sentinel" aria-hidden="true"></span>
+<header class="top">
+  <div class="wrap top-in">
+    <a class="brand" href="/" aria-label="Aviram Weisberg">
+      <span class="brand-name">Aviram Weisberg</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/work/">Work</a>
+      <a href="/lab/" aria-current="page">Perspectives</a>
+      <a href="/about/">About</a>
+      <a class="nav-cta" href="https://calendar.app.google/bDE77A7Af282fTHZ9" data-book rel="noopener">Let’s talk</a>
+    </nav>
+  </div>
+<div class="progress" id="progress"></div></header>
 
-<nav class="toc" aria-label="On this page">
+<nav class="syn-toc" aria-label="On this page">
   <div class="tk">ON THIS PAGE</div>
   <a href="#map">The map</a><a href="#axis1"><b>1</b> Professions</a><a href="#axis2"><b>2</b> Pace and radius</a><a href="#axis3"><b>3</b> Meaningful skills</a><a href="#israel"><b>4</b> The Israeli lens</a><a href="#windows"><b>5</b> Discussion windows</a><a href="#framings"><b>6</b> Three framings</a><a href="#meet">Where it meets</a><a href="#comic">The comic</a><a href="#play">Play it yourself</a><a href="#harari">Addendum: Harari</a><a href="#about">About this work</a><a href="#refs">References</a>
 </nav>
 
 <main id="main">
-<div class="wide"><a class="back" href="/lab/">← Perspectives</a></div>
+<div class="wide"><a class="syn-back" href="/lab/">← Perspectives</a></div>
 <div class="wide"><section class="banner" aria-label="Who builds the future?">
   <div class="bn-text">
     <div class="kicker">Synthesis · November 2026</div>
@@ -309,7 +318,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     <g class="bn-dot d1"><circle r="5" fill="#244CFF"/></g><g class="bn-dot d2"><circle r="5" fill="#F4AC78"/></g><g class="bn-dot d3"><circle r="5" fill="#171B2B"/></g>
   </svg>
 </section></div>
-<div class="col hero">
+<div class="col syn-hero">
   <p class="lede">What should a sixteen-year-old learn today, when the tools change every few months? We spent a year reading about AI, work and technology education to sit with that question properly. This page shares what we found, where Israel stands, and the questions we are still arguing about. It won’t hand you answers. It should help you ask better ones.</p>
   <div class="credit"><img src="bu-logo.png" alt="BU. Be the Future You. By BeNetivei Udi" width="96" height="46"><p>Research and synthesis by <b>Aviram Weisberg</b>, developed at <b>Be’Netivei Udi (BU)</b> for a strategic discussion on the future of youth technology education in Israel.</p></div>
   <div class="listen" id="listen">
@@ -345,7 +354,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 </div>
 
 <div class="col" id="axes">
-  <h2><span class="n">IN ONE MINUTE</span>Three axes, one picture</h2>
+  <h2><span class="syn-n">IN ONE MINUTE</span>Three axes, one picture</h2>
   <p>Almost everything we read lands on one of three axes. They pull on each other: faster tools reshape jobs, and both nudge education back toward skills that outlive any tool. Each axis ends where the real conversation starts, with a question.</p>
   <div class="roadmap">
     <p><b>How this synthesis is organised.</b> We proceed in five movements. <a href="#axis1">Section 1</a> asks what is happening to the first rung of technical work. <a href="#axis2">Section 2</a> asks how fast the tools are changing, and why that speed matters more for a curriculum than any single capability. <a href="#axis3">Section 3</a> turns from labour markets to learning itself. <a href="#israel">Section 4</a> reads Israel’s recent education decisions against that picture, and <a href="#windows">Sections 5</a> and <a href="#framings">6</a> bring it back to the room: the tensions we argued about, and the three ways the underlying question can be framed.</p>
@@ -360,7 +369,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 <!-- AXIS 1 -->
 <section class="chapter"><div class="col">
-  <h2 id="axis1"><span class="n">1 · AXIS ONE · PROFESSIONS</span>The first step in is changing</h2>
+  <h2 id="axis1"><span class="syn-n">1 · AXIS ONE · PROFESSIONS</span>The first step in is changing</h2>
   <p class="lead2">Software jobs aren’t vanishing. What’s changing is the first step in. The work juniors used to learn on is increasingly done by tools, and employers are asking for something else: people who can frame a problem, check the output and own the result.</p>
   <figure class="viz rv">
     <div class="fig-k">FIGURE 1</div><div class="fig-t">AI skills went from rare to routine in a year of job ads</div>
@@ -423,7 +432,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 <!-- AXIS 2 -->
 <section class="chapter"><div class="col">
-  <h2 id="axis2"><span class="n">2 · AXIS TWO · PACE AND RADIUS</span>Faster than the instruments</h2>
+  <h2 id="axis2"><span class="syn-n">2 · AXIS TWO · PACE AND RADIUS</span>Faster than the instruments</h2>
   <p class="lead2">The tools are moving faster than our ability to measure them, let alone teach them. That speed, more than any single breakthrough, is what makes planning feel so hard.</p>
   <figure class="viz rv">
     <div class="fig-k">FIGURE 2</div><div class="fig-t">One syllabus cycle, about seven times the capability</div>
@@ -462,7 +471,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 <!-- AXIS 3 -->
 <section class="chapter"><div class="col">
-  <h2 id="axis3"><span class="n">3 · AXIS THREE · MEANINGFUL SKILLS</span>Design decides, not the model</h2>
+  <h2 id="axis3"><span class="syn-n">3 · AXIS THREE · MEANINGFUL SKILLS</span>Design decides, not the model</h2>
   <p class="lead2">The learning research is thinner than the hype, but it keeps pointing the same way: what matters is how AI is woven into learning, not which model you pick. And the stronger the machine gets, the more we seem to value what is human, hands-on and verified.</p>
   <figure class="viz rv">
     <div class="fig-k">FIGURE 3</div><div class="fig-t">The same technology, from large gains to none to harm</div>
@@ -508,7 +517,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 </div></section>
 
 <section class="chapter"><div class="col">
-  <h2 id="israel"><span class="n">4 · THE ISRAELI LENS</span>What the system has decided, and what it hasn’t</h2>
+  <h2 id="israel"><span class="syn-n">4 · THE ISRAELI LENS</span>What the system has decided, and what it hasn’t</h2>
   <p class="lead2">Israel isn’t waiting. In 2026 the Ministry of Education set AI targets for the whole school system and opened a selective AI major for high school. Those are real decisions. What is still open is who each one is really for, who will teach it, and how we will know it worked.</p>
 
   <h3>What has been decided</h3>
@@ -562,7 +571,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 </div></section>
 
 <section class="chapter"><div class="col">
-  <h2 id="windows"><span class="n">5 · DISCUSSION WINDOWS</span>What the room argued about</h2>
+  <h2 id="windows"><span class="syn-n">5 · DISCUSSION WINDOWS</span>What the room argued about</h2>
   <p class="lead2">In the room, we stopped every so often to hold a tension on purpose: two positions, both taken seriously, no rush to settle. Here they are as they were asked, without the room’s conclusions, so you can have the argument yourself.</p>
 </div>
 <div class="wide"><div class="qgrid">
@@ -577,7 +586,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 <div class="col">  <p class="bridge"><span>Where this leads</span>Across the windows, the same underlying disagreement kept resurfacing in different forms. Section 6 makes it explicit.</p>
 </div>
 <section class="chapter"><div class="col">
-  <h2 id="framings"><span class="n">6 · THREE FRAMINGS</span>What exactly are we teaching?</h2>
+  <h2 id="framings"><span class="syn-n">6 · THREE FRAMINGS</span>What exactly are we teaching?</h2>
   <p class="lead2">Underneath every one of those arguments sits a simpler question. When people say “AI education”, they usually mean one of three very different things, each with its own logic, evidence, cost and shelf life. Pulling them apart makes the conversation clearer. Choosing between them is left to you.</p>
 </div>
 <div class="col"><figure class="doors rv"><img src="comic/framings-doors.webp" width="1200" height="880" loading="lazy" alt="A teenager and an educator stand before three doors: Work with AI, The science of AI, and Learn to adapt. No door is highlighted."><figcaption>Three doors, none of them marked as the right one. The rest of this section describes what lies behind each.</figcaption></figure></div>
@@ -642,7 +651,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 
 <section class="chapter"><div class="wide">
-  <h2 id="meet" style="max-width:740px;margin-left:auto;margin-right:auto"><span class="n">WHERE IT MEETS</span>One tension, three sides</h2>
+  <h2 id="meet" style="max-width:740px;margin-left:auto;margin-right:auto"><span class="syn-n">WHERE IT MEETS</span>One tension, three sides</h2>
   <figure class="viz rv" style="max-width:980px;margin-left:auto;margin-right:auto">
   <svg viewBox="0 0 1000 430" width="100%">
     <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#62647A"></path></marker></defs>
@@ -667,7 +676,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   </svg>
   <figcaption>Each axis feeds the next. Read around the triangle, not down a list. The question in the middle is the one every framing above tries to ask well.</figcaption></figure>
 
-  <h2 id="comic" style="max-width:740px;margin-left:auto;margin-right:auto"><span class="n">THE SHORT VERSION</span>As a comic</h2>
+  <h2 id="comic" style="max-width:740px;margin-left:auto;margin-right:auto"><span class="syn-n">THE SHORT VERSION</span>As a comic</h2>
   <div class="comic">
     <figure class="panel" style="margin:0"><img src="comic/panel-01.webp" width="900" height="660" loading="lazy" alt="A small AI figure looks up at a staircase of task bars, each twice as long as the one below, while calendar pages fly away: My tasks keep getting longer!">
       <figcaption class="cap"><span class="pn">01</span> Every ~4 months, the tasks an AI finishes alone double in length.<small>METR, 2026</small></figcaption></figure>
@@ -693,7 +702,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 </div></section>
 
 <section class="chapter"><div class="col">
-  <h2 id="play"><span class="n">TRY IT · SELF-RUN</span>Play the job hunt yourself</h2>
+  <h2 id="play"><span class="syn-n">TRY IT · SELF-RUN</span>Play the job hunt yourself</h2>
   <p class="lead2">In the room, teams raced each other on this. Here you can play it alone: no code, no leaderboard. Twelve minutes on a real job board will tell you more about Axis 1 than any chart on this page.</p>
 </div>
 <div class="wide"><div class="game rv">
@@ -707,22 +716,22 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     <div class="gcell"><b>Solo</b><span>score stays in your browser</span></div>
   </div>
   <div class="btns">
-    <button class="btn primary" id="play-here" type="button">▶ Play here</button>
-    <a class="btn" href="/job-hunt-ctf/?solo" target="_blank" rel="noopener">Open full screen ↗</a>
-    <a class="btn" href="/job-hunt-ctf/?solo&amp;reveal" target="_blank" rel="noopener">After playing: reveal the years ↗</a>
+    <button class="syn-btn primary" id="play-here" type="button">▶ Play here</button>
+    <a class="syn-btn" href="/job-hunt-ctf/?solo" target="_blank" rel="noopener">Open full screen ↗</a>
+    <a class="syn-btn" href="/job-hunt-ctf/?solo&amp;reveal" target="_blank" rel="noopener">After playing: reveal the years ↗</a>
   </div>
   <div class="game-frame" id="game-frame"></div>
   <small>Shown here at a fixed desktop resolution, scaled to fit. For the full-size version, use “Open full screen”. The interface is in Hebrew; the ads are in English. Nothing you type is sent anywhere in solo mode.</small>
 </div></div></section>
 
 <section class="chapter"><div class="col">
-  <h2 id="talk"><span class="n">THE TALK</span>The slides (in Hebrew)</h2>
+  <h2 id="talk"><span class="syn-n">THE TALK</span>The slides (in Hebrew)</h2>
   <p>The full talk this synthesis was drawn from, including the deep-dive sections. It is shared with the people who took part in the discussion; enter the access code you received to open it. Use the button in the corner, or press F, for full screen.</p>
   <div class="talk"><iframe src="/job-hunt-ctf/talk/" title="Strategic discussion slides (Hebrew)" allow="fullscreen" allowfullscreen loading="lazy"></iframe></div>
   <p class="small">Trainee photos, speaker notes and the live game were removed from this version.</p>
 
 
-  <h2 id="harari"><span class="n">ADDENDUM</span>Yuval Noah Harari on the cows and the market</h2>
+  <h2 id="harari"><span class="syn-n">ADDENDUM</span>Yuval Noah Harari on the cows and the market</h2>
   <div class="harari">
     <div class="h-img"><img src="comic/panel-05.webp" width="900" height="660" loading="lazy" alt="A cow looks at the farmer by the fence but not at the market screen high above them"></div>
     <div>
@@ -742,7 +751,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </div>
 
-  <h2 id="about"><span class="n">ABOUT THIS WORK</span>Where it was made</h2>
+  <h2 id="about"><span class="syn-n">ABOUT THIS WORK</span>Where it was made</h2>
   <div class="org">
     <img src="bu-logo.png" alt="BU. Be the Future You. By BeNetivei Udi" width="200" height="96">
     <div>
@@ -751,7 +760,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     </div>
   </div>
 
-  <h2 id="refs"><span class="n">SOURCES</span>References</h2>
+  <h2 id="refs"><span class="syn-n">SOURCES</span>References</h2>
   <p>Numbers in the text refer to this list, ordered by first mention. Hebrew-language and company sources without a stable public link are listed without one.</p>
   <details class="refbox" id="refbox">
     <summary><span>Show all 33 references</span><i>▾</i></summary>
@@ -793,7 +802,23 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   </details>
 </div>
 </main>
-<footer><div class="col"><span>Aviram Weisberg · Synthesis, November 2026 · developed at Be’Netivei Udi (BU)</span><a href="/lab/">More perspectives →</a></div></footer>
+<footer class="foot" id="contact">
+  <div class="wrap foot-in">
+    <a class="foot-talk" href="https://calendar.app.google/bDE77A7Af282fTHZ9" data-book rel="noopener">Let’s talk <span class="ne" aria-hidden="true">↗</span></a>
+    <span class="foot-links"><a href="mailto:aviramw.dm@gmail.com">aviramw.dm@gmail.com</a><a href="https://linkedin.com/in/aviramw" rel="me">LinkedIn</a><a href="https://github.com/ThisIsAviram" rel="me">GitHub</a></span>
+    <p class="foot-sign">Curiosity, with the discipline to build.</p>
+  </div>
+</footer>
+<dialog class="book-dialog" id="book" aria-label="Book a meeting">
+  <div class="book-head">
+    <p class="label">Book a meeting</p>
+    <a class="tlink" href="https://calendar.app.google/bDE77A7Af282fTHZ9" target="_blank" rel="noopener">Open in Google Calendar <span class="ne" aria-hidden="true">↗</span></a>
+    <button class="x" type="button" data-close aria-label="Close">×</button>
+  </div>
+  <iframe title="Booking calendar" data-src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ2asUCZhAo2J0IAsV2cTZ1OgbEJQGOqu2N4eyRBMwd-3xSbpMm2X-0wYHUrrPLh40jcDutzR2oN?gv=true" loading="lazy"></iframe>
+</dialog>
+<script src="/static/site.js?v=92c17a42" defer></script>
+<script src="/static/patterns.js?v=fd474317" defer></script>
 <a class="totop" id="totop" href="#main" aria-label="Back to top">↑</a>
 <script>
 (() => {
@@ -803,7 +828,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
   if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
     document.querySelectorAll(".rv").forEach(el => io.observe(el));
-    const links = [...document.querySelectorAll(".toc a")], map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
+    const links = [...document.querySelectorAll(".syn-toc a")], map = new Map(links.map(a => [a.getAttribute("href").slice(1), a]));
     const so = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { links.forEach(a => a.classList.remove("on")); const a = map.get(e.target.id); if (a) a.classList.add("on"); } }), { rootMargin: "-20% 0px -70% 0px" });
     map.forEach((a, id) => { const el = document.getElementById(id); if (el) so.observe(el); });
   } else document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
