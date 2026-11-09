@@ -157,8 +157,8 @@ figure.viz figcaption b{color:var(--ink);font-weight:600}
 .btn{display:inline-flex;align-items:center;gap:8px;font:500 15px var(--sans);text-decoration:none;padding:12px 20px;border-radius:99px;border:1px solid rgba(255,255,255,.4);color:#fff;background:transparent;cursor:pointer}
 .btn:hover{background:rgba(255,255,255,.1);color:#fff}
 .btn.primary{background:#85D9FF;border-color:#85D9FF;color:var(--navy)}.btn.primary:hover{background:#fff;border-color:#fff;color:var(--navy)}
-.game-frame{display:none;margin-top:22px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#fff;height:min(82vh,760px)}
-.game-frame.on{display:block}.game-frame iframe{width:100%;height:100%;border:0;display:block}
+.game-frame{display:none;margin-top:22px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#0B0F1A;position:relative;aspect-ratio:1440/900;width:100%}
+.game-frame.on{display:block}.game-frame iframe{position:absolute;left:0;top:0;width:1440px;height:900px;border:0;display:block;transform-origin:0 0}
 .game small{display:block;color:#9AA6C0;margin-top:14px;font-size:12.5px;position:relative}
 
 /* comic */
@@ -588,7 +588,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     <a class="btn" href="/job-hunt-ctf/?solo&amp;reveal" target="_blank" rel="noopener">After playing: reveal the years ↗</a>
   </div>
   <div class="game-frame" id="game-frame"></div>
-  <small>The interface is in Hebrew; the ads are in English. Best on a laptop. Nothing you type is sent anywhere in solo mode.</small>
+  <small>Shown here at a fixed desktop resolution, scaled to fit. For the full-size version, use “Open full screen”. The interface is in Hebrew; the ads are in English. Nothing you type is sent anywhere in solo mode.</small>
 </div></div></section>
 
 <section class="chapter"><div class="col">
@@ -669,9 +669,12 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     map.forEach((a, id) => { const el = document.getElementById(id); if (el) so.observe(el); });
   } else document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
   const btn = document.getElementById("play-here"), fr = document.getElementById("game-frame");
+  /* The game is laid out for a fixed 1440×900 desktop screen: render it at that size and scale it to fit, instead of letting it fall into its narrow layout. */
+  const fit = () => { const f = fr.querySelector("iframe"); if (f && fr.clientWidth) f.style.transform = "scale(" + fr.clientWidth / 1440 + ")"; };
+  addEventListener("resize", fit);
   btn.addEventListener("click", () => {
-    if (!fr.firstChild) fr.innerHTML = '<iframe src="/job-hunt-ctf/?solo" title="BU Job Lab, solo mode (Hebrew)" allow="fullscreen" allowfullscreen></iframe>';
-    const on = fr.classList.toggle("on"); btn.textContent = on ? "■ Close the game" : "▶ Play here";
+    if (!fr.firstChild) fr.innerHTML = '<iframe src="/job-hunt-ctf/?solo" title="BU Job Lab, solo mode (Hebrew)" width="1440" height="900" allow="fullscreen" allowfullscreen></iframe>';
+    const on = fr.classList.toggle("on"); btn.textContent = on ? "■ Close the game" : "▶ Play here"; fit();
     if (on) fr.scrollIntoView({ behavior: "smooth", block: "center" });
   });
 })();
