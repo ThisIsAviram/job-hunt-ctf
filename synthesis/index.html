@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Who builds the future? A synthesis - Aviram Weisberg</title>
+<meta name="description" content="What a year of research on AI, computer science education and work shows, along three axes: professions shifting, the pace and reach of change, and the return to meaningful skills. A map, not a position.">
+<link rel="stylesheet" href="/static/fonts.css">
+<style>
+:root{--paper:#F6EFE7;--card:#FFFCF7;--ink:#171B2B;--ink-2:#3A3F52;--mute:#62647A;--line:#E5DED2;--line-2:#CFC8B8;--ember:#244CFF;--ember-ink:#1B39C7;--apricot:#F4AC78;--lilac:#DDD7EE;
+--serif:"Newsreader","Frank Ruhl",Georgia,serif;--sans:"Inter","Heebo",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--w:1240px;--gut:max(20px,calc((100vw - var(--w))/2))}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 17px/1.75 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--ember-ink)}a:hover{color:var(--ink)}
+.wrap{max-width:var(--w);margin:0 auto;padding:0 20px}
+.top{position:sticky;top:0;z-index:10;background:rgba(246,239,231,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{font:500 13px var(--sans);letter-spacing:.28em;text-transform:uppercase;color:var(--ink);text-decoration:none}
+.nav{display:flex;gap:28px}.nav a{font:400 15px var(--sans);color:var(--ink);text-decoration:none}.nav a[aria-current]{border-bottom:2px solid var(--ink);padding-bottom:4px}.nav .nav-cta{color:var(--ember)}
+.col{max-width:760px;margin:0 auto;padding:0 20px}
+.back{display:inline-block;margin-top:44px;font:400 14px var(--sans);color:var(--mute);text-decoration:none}
+.kicker{margin:40px 0 10px;font:500 12px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+h1{font:400 clamp(44px,6vw,68px)/1.06 var(--serif);margin:0 0 22px;letter-spacing:-.01em}
+h1 em{font-style:italic;color:var(--ember)}
+.lede{font:400 21px/1.55 var(--serif);color:var(--ink-2);margin:0 0 34px;max-width:620px}
+.note{border-top:1px solid var(--ink);padding-top:22px;font-style:italic;color:var(--ink-2);font-size:16px}
+h2{font:400 34px/1.2 var(--serif);margin:72px 0 14px}
+h2 .n{font:500 13px var(--mono);color:var(--ember);display:block;letter-spacing:.08em;margin-bottom:6px}
+h3{font:600 15px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);margin:36px 0 10px}
+p{margin:0 0 18px}
+.axes{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:34px 0 10px}
+.axis{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px}
+.axis .num{font:500 12px var(--mono);color:var(--ember)}
+.axis h4{font:500 21px/1.25 var(--serif);margin:8px 0 10px}
+.axis p{font-size:15px;line-height:1.6;color:var(--ink-2);margin:0}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:14px;color:var(--ink-2);margin:6px 0 0}
+.tag{display:inline-block;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;white-space:nowrap}
+.t-m{background:var(--ink);color:#fff}.t-r{background:var(--lilac);color:var(--ink)}.t-c{background:transparent;color:var(--ink-2);border:1px dashed var(--line-2)}
+.signals{width:100%;border-collapse:collapse;margin:14px 0 8px;font-size:15px;line-height:1.55}
+.signals th{text-align:left;font:600 12px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--ink);padding:8px 10px 8px 0}
+.signals td{border-bottom:1px solid var(--line);padding:12px 10px 12px 0;vertical-align:top}
+.signals td.big{font:500 22px/1.2 var(--serif);white-space:nowrap;width:120px}
+.signals td.src{color:var(--mute);font-size:13px;width:170px}
+.not{background:var(--card);border-left:3px solid var(--apricot);padding:16px 20px;margin:22px 0;font-size:15.5px;border-radius:0 10px 10px 0}
+.not b{font-weight:600}
+.qs{list-style:none;padding:0;margin:8px 0 0;counter-reset:q}
+.qs li{counter-increment:q;position:relative;padding:12px 0 12px 44px;border-bottom:1px solid var(--line);font:400 19px/1.45 var(--serif)}
+.qs li::before{content:"Q" counter(q);position:absolute;left:0;top:15px;font:500 12px var(--mono);color:var(--ember)}
+.wide{max-width:1040px;margin:0 auto;padding:0 20px}
+.meet{margin:26px 0 0}
+.comic{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:26px 0 10px}
+.panel{background:var(--card);border:2px solid var(--ink);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;box-shadow:4px 4px 0 var(--ink)}
+.panel svg{display:block;width:100%;height:auto;background:#FFFCF7}
+.cap{border-top:2px solid var(--ink);padding:10px 12px 12px;font:500 14px/1.4 var(--sans);background:#fff}
+.cap small{display:block;font:400 11.5px/1.4 var(--sans);color:var(--mute);margin-top:4px}
+.pn{font:600 11px var(--mono);color:var(--ember);letter-spacing:.06em}
+.talk{margin:22px 0 0;border:1px solid var(--line-2);border-radius:14px;overflow:hidden;background:#062F6A;aspect-ratio:16/9}
+.talk iframe{width:100%;height:100%;border:0;display:block}
+.small{font-size:14px;color:var(--mute)}
+.refs{font-size:14px;line-height:1.6;color:var(--ink-2);padding-left:18px}.refs li{margin-bottom:6px}
+footer{margin:90px 0 0;border-top:1px solid var(--line);padding:30px 0 50px;font-size:14px;color:var(--mute)}
+@media (max-width:900px){.axes{grid-template-columns:1fr}.comic{grid-template-columns:repeat(2,1fr)}.nav{gap:16px}.signals td.src{display:none}}
+@media (max-width:520px){.comic{grid-template-columns:1fr}.nav a:not(.nav-cta){display:none}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap top-in">
+  <a class="brand" href="/" aria-label="Aviram Weisberg">Aviram Weisberg</a>
+  <nav class="nav" aria-label="Main"><a href="/work/">Work</a><a href="/lab/" aria-current="page">Perspectives</a><a href="/about/">About</a><a class="nav-cta" href="https://calendar.app.google/bDE77A7Af282fTHZ9" rel="noopener">Let’s talk</a></nav>
+</div></header>
+
+<main id="main">
+<div class="col">
+  <a class="back" href="/lab/">← Perspectives</a>
+  <div class="kicker">Synthesis · November 2026</div>
+  <h1>Who builds the <em>future?</em></h1>
+  <p class="lede">What a year of research on AI, computer science education and work actually shows, organised along three axes. A map of the field, with the questions it raises. Not a position.</p>
+  <p class="note">This synthesis distils the research behind a strategic discussion held in November 2026 at a national youth technology-education program in Israel: about 190 sorted sources, a research deck in four versions, and an 82-slide talk (in Hebrew, at the bottom of this page). Every number is a snapshot, and forecasts in this field have been wrong, systematically, in both directions.</p>
+
+  <h2 id="minute"><span class="n">IN ONE MINUTE</span>Three axes, one picture</h2>
+  <p>Most of what we gathered falls on three axes. They are not separate stories: the speed of the tools drives the change in jobs, and both push education back toward skills that outlast any tool.</p>
+</div>
+<div class="wide"><div class="axes">
+  <div class="axis"><div class="num">AXIS 1</div><h4>Professions are shifting</h4><p>The entry door into software work is narrowing for the youngest, while demand moves toward people who can direct, check and own what AI produces. The job title itself is open.</p></div>
+  <div class="axis"><div class="num">AXIS 2</div><h4>Pace and radius of change</h4><p>Tool capability doubles in months, cost falls by orders of magnitude, and the effects reach science, organisations and whole labour markets faster than rules or measurement can follow.</p></div>
+  <div class="axis"><div class="num">AXIS 3</div><h4>The return to meaningful skills</h4><p>Where learning was measured, design beats the model: guided use helps, open use can hurt. In parallel, schools and employers are bringing learning and assessment back into the room.</p></div>
+</div>
+<div class="col" style="padding:0">
+  <p class="legend"><span><span class="tag t-m">Measured</span> controlled study or large dataset</span><span><span class="tag t-r">Reported</span> company or survey report</span><span><span class="tag t-c">Contested</span> early, small or disputed</span></p>
+</div></div>
+
+<div class="col">
+  <h2 id="axis1"><span class="n">AXIS 1</span>Professions are shifting</h2>
+  <p>The clearest signal is not that software jobs disappear. It is that the first rung of the ladder changes shape, and that what employers ask for moves from writing code to framing, checking and owning it.</p>
+  <table class="signals"><thead><tr><th>Signal</th><th>What it shows</th><th class="src">Source</th></tr></thead><tbody>
+    <tr><td class="big">−13%</td><td>Relative employment drop for ages 22–25 in AI-exposed occupations (late 2022 → mid 2025), while older workers in the same jobs held steady or grew. <span class="tag t-m">Measured</span></td><td class="src">Brynjolfsson, Chandar &amp; Chen, Stanford, 2025</td></tr>
+    <tr><td class="big">9→19%</td><td>Share of job ads asking for AI skills, Q1 2025 → Q1 2026; in entry-level ads, 8.3% → 13.8%. <span class="tag t-r">Reported</span></td><td class="src">FrogHire, 20.7M ads, 2026</td></tr>
+    <tr><td class="big">+14%</td><td>Software-developer postings year on year, 47% mentioning AI. IT overall is still about 30% below pre-pandemic. <span class="tag t-r">Reported</span></td><td class="src">Indeed Hiring Lab, May 2026</td></tr>
+    <tr><td class="big">75%</td><td>Of new code at Google generated by AI and approved by engineers. <span class="tag t-r">Reported</span></td><td class="src">Google Cloud Next, Apr 2026</td></tr>
+    <tr><td class="big">36%</td><td>Of new US startups founded by a single founder (23.7% in 2019), who still raise only ~15% of round money. <span class="tag t-r">Reported</span></td><td class="src">Carta, 2025</td></tr>
+    <tr><td class="big">84 / 46%</td><td>Developers who use or plan to use AI tools / who don’t trust their accuracy. <span class="tag t-r">Reported</span></td><td class="src">Stack Overflow survey, 2025</td></tr>
+  </tbody></table>
+  <p>Across these sources, the skills that show up more often are a recognisable set: breaking a problem down and specifying it in writing, judging AI output for correctness and safety, understanding a system end to end, and holding a product decision. “Programmer” describes less and less of the work. Architect, engineer, conductor and builder are all on the table; none has won.</p>
+  <div class="not"><b>What this does not say.</b> The labour data is descriptive, not causal: interest rates, post-pandemic correction and AI move together. Company figures describe one company. Rising demand in ads is not yet rising demand in hiring.</div>
+  <h3>Open questions</h3>
+  <ol class="qs">
+    <li>What does a graduate know that a domain expert with AI tools doesn’t, and the other way round?</li>
+    <li>If the first role demands more, what counts as “ready for a first job” in 2028?</li>
+    <li>Which skills are best learned on the job, and which must arrive ready from a program?</li>
+    <li>Is a new job title a rebrand, or a change in what we teach and assess?</li>
+  </ol>
+
+  <h2 id="axis2"><span class="n">AXIS 2</span>Pace and radius of change</h2>
+  <p>The tools change faster than the instruments built to measure them. That speed, more than any single capability, is what makes planning hard: a yearly curriculum cycle meets a capability curve that roughly doubles three times a year.</p>
+  <table class="signals"><thead><tr><th>Signal</th><th>What it shows</th><th class="src">Source</th></tr></thead><tbody>
+    <tr><td class="big">4.3 mo</td><td>Doubling time of the length of task a model completes alone (7 months over 2019–2024). By May 2026 the leading model handled tasks of at least 16 expert-hours; in 2022 it was about 30 seconds. <span class="tag t-m">Measured</span></td><td class="src">METR, Time Horizon 1.1, 2026</td></tr>
+    <tr><td class="big">280×</td><td>Cheaper for the same capability in about two years. Total spend does not fall: volume grows faster. <span class="tag t-m">Measured</span></td><td class="src">Stanford AI Index 2025; Epoch AI</td></tr>
+    <tr><td class="big">2033–2061</td><td>Range of expert and forecaster estimates for human-level AI over the last decade, moving in both directions year to year. <span class="tag t-c">Contested</span></td><td class="src">AI Impacts; Metaculus</td></tr>
+    <tr><td class="big">0</td><td>Pauses that followed the promises to slow down: the 2023 open letter, Bletchley, Seoul, Paris. Parts of the EU AI Act slipped to 2027–2028. <span class="tag t-r">Reported</span></td><td class="src">FLI; gov.uk; Sidley Austin</td></tr>
+  </tbody></table>
+  <p><b>The radius is wide.</b> AI contributed to a Nobel in chemistry (AlphaFold), reached gold at the International Math Olympiad and solved open Erdős problems, while its authors note it is stronger at search and construction than at deep insight. In organisations, eight recent incidents shared five structures: permissions as the blast radius, production faster than review, usage pricing with no ceiling, AI outside the fence, and removing the human layer only to rebuild it later. Historian Yuval Noah Harari put the deeper worry in one image: cows see the farmer but not the market that decides their lives, and we may come to live inside AI-built financial and legal systems we cannot understand.</p>
+  <p><b>Context, not cause.</b> The OECD reported in September 2026 that the share of Israelis aged 18–24 not in employment, education or training rose from 17% to 20% between 2015 and 2025, while the OECD average fell from 16% to 13%. The report does not explain why, and nothing ties it to AI. It belongs here as a reminder of who falls between institutions while the ground moves.</p>
+  <div class="not"><b>What this does not say.</b> Benchmarks measure defined software tasks, not real jobs. Incidents are cases, not failure rates. A metaphor is a lens, not a forecast.</div>
+  <h3>Open questions</h3>
+  <ol class="qs">
+    <li>If the tool changes several times within one school year, what is stable enough to teach, and what isn’t?</li>
+    <li>What changes in planning when forecasts themselves are unreliable?</li>
+    <li>Who is responsible for understanding systems nobody fully built: the user, the organisation, the educator, or no one?</li>
+    <li>What happens to young people when the first door narrows, and who notices first?</li>
+  </ol>
+
+  <h2 id="axis3"><span class="n">AXIS 3</span>The return to meaningful skills</h2>
+  <p>The education evidence is thinner than the hype, but it points one way: how AI is built into learning matters more than which model is used. And the counter-trend is real: as the machine gets stronger, what is human, physical and verified gains value.</p>
+  <table class="signals"><thead><tr><th>Signal</th><th>What it shows</th><th class="src">Source</th></tr></thead><tbody>
+    <tr><td class="big">+0.73–1.3 SD</td><td>Learning gains from an AI tutor built on active-learning principles, Harvard physics, 194 students. <span class="tag t-m">Measured</span></td><td class="src">Kestin et al., Sci. Reports, 2025</td></tr>
+    <tr><td class="big">+0.31 SD</td><td>Six weeks of teacher-guided AI tutoring in Nigeria. <span class="tag t-m">Measured</span></td><td class="src">World Bank WP 11125, 2025</td></tr>
+    <tr><td class="big">−17%</td><td>On a test without AI, for high-schoolers who practised with an open chatbot. With a designed tutor: no drop. <span class="tag t-m">Measured</span></td><td class="src">Bastani et al., PNAS, 2025</td></tr>
+    <tr><td class="big">≈0</td><td>Two years of an AI tutor in middle schools, beyond regular practice. A good tool fails when students don’t use it. <span class="tag t-m">Measured</span></td><td class="src">Oreopoulos &amp; Low, NBER, 2026</td></tr>
+    <tr><td class="big">50 / 67%</td><td>Comprehension score when developers delegated to AI vs wrote by hand; time savings not significant. <span class="tag t-c">Contested</span></td><td class="src">Shen &amp; Tamkin, Anthropic, 2026 (52 devs)</td></tr>
+    <tr><td class="big">58%</td><td>Of education systems restrict phones in school (about 24% in 2023). Handwritten exam books, in-person assessment tracks and in-person interviews are returning. <span class="tag t-r">Reported</span></td><td class="src">UNESCO GEM, 2026; WSJ; Univ. of Sydney</td></tr>
+  </tbody></table>
+  <p>Universities moved first on literacy: Ohio State, Purdue and the Technion now require AI fluency for every student, and none has published outcome data yet. The skills that keep surfacing are older than AI: decomposing problems, evaluating output, understanding systems, domain expertise, and the ability to learn the next tool, which, when tools change every few months, is part of the skill itself.</p>
+  <div class="not"><b>What this does not say.</b> Most trials are short and small, some are preprints. No published results is not proof of failure. The offline turn is not evidence that offline is better.</div>
+  <h3>Open questions</h3>
+  <ol class="qs">
+    <li>What must a learner be able to do without AI, and what can safely be left to the tool?</li>
+    <li>How do we know someone understands, and isn’t just producing: tests, portfolios, defending their code, or a mix?</li>
+    <li>What do we keep offline on purpose, and can we tell it apart from what is offline by habit?</li>
+    <li>When the decision comes before the evidence, what makes a program an experiment we can learn from rather than a commitment?</li>
+  </ol>
+</div>
+
+<div class="wide">
+  <h2 id="meet" style="max-width:720px;margin-left:auto;margin-right:auto"><span class="n">WHERE THE AXES MEET</span>One tension, three sides</h2>
+  <div class="meet" role="img" aria-label="Diagram: three axes around one central question">
+  <svg viewBox="0 0 1000 430" width="100%">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#62647A"></path></marker></defs>
+    <line x1="500" y1="96" x2="225" y2="320" stroke="#CFC8B8" stroke-width="2" marker-end="url(#ar)"></line>
+    <line x1="500" y1="96" x2="775" y2="320" stroke="#CFC8B8" stroke-width="2" marker-end="url(#ar)"></line>
+    <line x1="300" y1="350" x2="700" y2="350" stroke="#CFC8B8" stroke-width="2" marker-end="url(#ar)"></line>
+    <rect x="370" y="22" width="260" height="78" rx="14" fill="#FFFCF7" stroke="#171B2B" stroke-width="1.5"></rect>
+    <text x="500" y="52" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#244CFF">AXIS 2</text>
+    <text x="500" y="80" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="22" fill="#171B2B">Pace and radius</text>
+    <rect x="70" y="312" width="250" height="78" rx="14" fill="#FFFCF7" stroke="#171B2B" stroke-width="1.5"></rect>
+    <text x="195" y="342" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#244CFF">AXIS 1</text>
+    <text x="195" y="370" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="22" fill="#171B2B">Professions shift</text>
+    <rect x="680" y="312" width="250" height="78" rx="14" fill="#FFFCF7" stroke="#171B2B" stroke-width="1.5"></rect>
+    <text x="805" y="342" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="12" fill="#244CFF">AXIS 3</text>
+    <text x="805" y="370" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="22" fill="#171B2B">Meaningful skills</text>
+    <text x="300" y="200" text-anchor="middle" font-family="Inter,system-ui" font-size="14" fill="#3A3F52">speed reshapes</text><text x="300" y="218" text-anchor="middle" font-family="Inter,system-ui" font-size="14" fill="#3A3F52">the entry door</text>
+    <text x="700" y="200" text-anchor="middle" font-family="Inter,system-ui" font-size="14" fill="#3A3F52">volatile tools push toward</text><text x="700" y="218" text-anchor="middle" font-family="Inter,system-ui" font-size="14" fill="#3A3F52">what outlasts them</text>
+    <text x="500" y="338" text-anchor="middle" font-family="Inter,system-ui" font-size="14" fill="#3A3F52">new roles ask for judgment, not syntax</text>
+    <circle cx="500" cy="242" r="58" fill="#244CFF"></circle>
+    <text x="500" y="236" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="17" fill="#fff">What is worth</text>
+    <text x="500" y="258" text-anchor="middle" font-family="Newsreader,Georgia,serif" font-size="17" fill="#fff">learning now?</text>
+  </svg></div>
+  <p class="col small" style="padding:0;max-width:720px">Each axis feeds the next. Read around the triangle, not down a list.</p>
+
+  <h2 id="comic" style="max-width:720px;margin-left:auto;margin-right:auto"><span class="n">THE SHORT VERSION</span>As a comic</h2>
+  <div class="comic">
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><rect x="40" y="120" width="40" height="70" rx="6" fill="#DDD7EE" stroke="#171B2B" stroke-width="2"/><circle cx="60" cy="100" r="22" fill="#DDD7EE" stroke="#171B2B" stroke-width="2"/><circle cx="53" cy="98" r="3" fill="#171B2B"/><circle cx="67" cy="98" r="3" fill="#171B2B"/><line x1="60" y1="78" x2="60" y2="66" stroke="#171B2B" stroke-width="2"/><circle cx="60" cy="63" r="4" fill="#244CFF"/><rect x="95" y="150" width="20" height="8" fill="#244CFF"/><rect x="95" y="138" width="40" height="8" fill="#244CFF" opacity=".75"/><rect x="95" y="126" width="80" height="8" fill="#244CFF" opacity=".55"/><rect x="95" y="114" width="160" height="8" fill="#244CFF" opacity=".35"/><path d="M150 40h120a10 10 0 0 1 10 10v30a10 10 0 0 1-10 10h-80l-20 16 4-16h-24a10 10 0 0 1-10-10V50a10 10 0 0 1 10-10z" fill="#fff" stroke="#171B2B" stroke-width="2"/><text x="210" y="62" text-anchor="middle" font-family="Inter" font-size="13" fill="#171B2B">My tasks keep</text><text x="210" y="78" text-anchor="middle" font-family="Inter" font-size="13" fill="#171B2B">getting longer!</text></svg>
+      <figcaption class="cap"><span class="pn">01</span> Every ~4 months, the tasks an AI finishes alone double in length.<small>METR, 2026</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><g transform="rotate(-8 90 110)"><path d="M40 80h90l20 30-20 30H40z" fill="#F4AC78" stroke="#171B2B" stroke-width="2"/><circle cx="135" cy="110" r="5" fill="#FFFCF7" stroke="#171B2B" stroke-width="2"/><text x="85" y="117" text-anchor="middle" font-family="Newsreader" font-size="26" fill="#171B2B">$20</text></g><line x1="62" y1="70" x2="128" y2="150" stroke="#C8102E" stroke-width="4"/><path d="M170 70h80l16 22-16 22h-80z" fill="#fff" stroke="#171B2B" stroke-width="2"/><text x="212" y="99" text-anchor="middle" font-family="Newsreader" font-size="22" fill="#244CFF">$0.07</text><text x="150" y="180" text-anchor="middle" font-family="Inter" font-size="13" fill="#62647A">per million tokens, same capability</text></svg>
+      <figcaption class="cap"><span class="pn">02</span> The same capability got 280× cheaper in two years. Spending still grows.<small>Stanford AI Index, 2025</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><rect x="150" y="40" width="90" height="150" fill="#E5DED2" stroke="#171B2B" stroke-width="2"/><path d="M150 40l30 10v130l-30 10z" fill="#244CFF" stroke="#171B2B" stroke-width="2"/><rect x="180" y="50" width="60" height="140" fill="#171B2B" opacity=".08"/><circle cx="90" cy="95" r="16" fill="#F4AC78" stroke="#171B2B" stroke-width="2"/><path d="M75 115h30l6 50H69z" fill="#DDD7EE" stroke="#171B2B" stroke-width="2"/><line x1="78" y1="165" x2="76" y2="190" stroke="#171B2B" stroke-width="3"/><line x1="102" y1="165" x2="104" y2="190" stroke="#171B2B" stroke-width="3"/><text x="90" y="60" text-anchor="middle" font-family="Newsreader" font-size="30" fill="#171B2B">?</text></svg>
+      <figcaption class="cap"><span class="pn">03</span> The first door narrows: −13% for ages 22–25 in AI-exposed jobs.<small>Stanford, 2025 · descriptive, not causal</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><rect x="40" y="40" width="220" height="70" rx="10" fill="#fff" stroke="#171B2B" stroke-width="2"/><text x="150" y="60" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="#62647A">HELLO, MY ROLE IS</text><text x="150" y="94" text-anchor="middle" font-family="Newsreader" font-size="26" fill="#171B2B">Programmer</text><line x1="88" y1="86" x2="212" y2="86" stroke="#C8102E" stroke-width="4"/><g font-family="Inter" font-size="13" fill="#171B2B"><rect x="30" y="130" width="74" height="26" rx="13" fill="#DDD7EE"/><text x="67" y="148" text-anchor="middle">Architect?</text><rect x="112" y="130" width="76" height="26" rx="13" fill="#DDD7EE"/><text x="150" y="148" text-anchor="middle">Engineer?</text><rect x="196" y="130" width="78" height="26" rx="13" fill="#DDD7EE"/><text x="235" y="148" text-anchor="middle">Conductor?</text><rect x="70" y="166" width="74" height="26" rx="13" fill="#DDD7EE"/><text x="107" y="184" text-anchor="middle">Builder?</text><rect x="150" y="166" width="100" height="26" rx="13" fill="#fff" stroke="#171B2B" stroke-dasharray="4 3"/><text x="200" y="184" text-anchor="middle">not yet named</text></g></svg>
+      <figcaption class="cap"><span class="pn">04</span> Writing code moves to the machine. The job title is up for grabs.<small>Synthesis of job-ad and research data</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><rect x="150" y="34" width="120" height="70" rx="6" fill="#171B2B"/><polyline points="160,90 180,80 196,86 214,60 232,70 258,46" fill="none" stroke="#7CE3A1" stroke-width="3"/><text x="210" y="50" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#9FB3C8">MARKET</text><line x1="210" y1="104" x2="210" y2="130" stroke="#171B2B" stroke-width="3"/><ellipse cx="95" cy="150" rx="50" ry="30" fill="#fff" stroke="#171B2B" stroke-width="2"/><circle cx="50" cy="128" r="22" fill="#fff" stroke="#171B2B" stroke-width="2"/><circle cx="44" cy="124" r="3" fill="#171B2B"/><ellipse cx="45" cy="138" rx="10" ry="6" fill="#F4AC78"/><path d="M36 108l-6-10M60 106l6-10" stroke="#171B2B" stroke-width="2"/><circle cx="90" cy="145" r="10" fill="#171B2B" opacity=".85"/><circle cx="118" cy="158" r="7" fill="#171B2B" opacity=".85"/><line x1="65" y1="178" x2="65" y2="198" stroke="#171B2B" stroke-width="3"/><line x1="125" y1="178" x2="125" y2="198" stroke="#171B2B" stroke-width="3"/><text x="72" y="70" font-family="Newsreader" font-size="22" fill="#171B2B">…?</text></svg>
+      <figcaption class="cap"><span class="pn">05</span> A historian’s image: the cow sees the farmer, not the market that runs her life.<small>Y. N. Harari, Czech TV, Oct 2026 · a lens, not a forecast</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><line x1="150" y1="20" x2="150" y2="200" stroke="#CFC8B8" stroke-width="2" stroke-dasharray="6 5"/><rect x="25" y="70" width="100" height="60" rx="8" fill="#fff" stroke="#171B2B" stroke-width="2"/><text x="75" y="96" text-anchor="middle" font-family="Inter" font-size="12" fill="#171B2B">“just give me</text><text x="75" y="112" text-anchor="middle" font-family="Inter" font-size="12" fill="#171B2B">the answer”</text><text x="75" y="170" text-anchor="middle" font-family="Newsreader" font-size="28" fill="#C8102E">−17%</text><rect x="175" y="70" width="100" height="60" rx="8" fill="#fff" stroke="#244CFF" stroke-width="2"/><text x="225" y="96" text-anchor="middle" font-family="Inter" font-size="12" fill="#171B2B">“what would you</text><text x="225" y="112" text-anchor="middle" font-family="Inter" font-size="12" fill="#171B2B">try first?”</text><text x="225" y="170" text-anchor="middle" font-family="Newsreader" font-size="28" fill="#244CFF">no drop</text><text x="75" y="50" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#62647A">OPEN CHAT</text><text x="225" y="50" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#62647A">DESIGNED TUTOR</text></svg>
+      <figcaption class="cap"><span class="pn">06</span> Same model, different design: open chat hurt the test without AI; a designed tutor didn’t.<small>Bastani et al., PNAS, 2025</small></figcaption></figure>
+    <figure class="panel" style="margin:0"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#FFFCF7"/><path d="M40 150h90l-8 40H48z" fill="#F4AC78" stroke="#171B2B" stroke-width="2"/><rect x="58" y="118" width="20" height="36" rx="4" fill="#171B2B"/><rect x="82" y="112" width="20" height="40" rx="4" fill="#3A3F52"/><rect x="170" y="70" width="100" height="120" rx="4" fill="#fff" stroke="#171B2B" stroke-width="2"/><path d="M185 95q15-10 30 0t30 0M185 120q15-10 30 0t30 0M185 145q15-10 30 0" fill="none" stroke="#244CFF" stroke-width="2"/><line x1="250" y1="170" x2="282" y2="138" stroke="#171B2B" stroke-width="4"/><text x="85" y="60" text-anchor="middle" font-family="Newsreader" font-size="18" fill="#171B2B">phones</text><text x="85" y="80" text-anchor="middle" font-family="Newsreader" font-size="18" fill="#171B2B">in the basket</text></svg>
+      <figcaption class="cap"><span class="pn">07</span> Meanwhile, learning walks back into the room: 58% of systems restrict phones.<small>UNESCO GEM, 2026</small></figcaption></figure>
+    <figure class="panel" style="margin:0;background:#244CFF"><svg viewBox="0 0 300 220"><rect width="300" height="220" fill="#244CFF"/><text x="150" y="128" text-anchor="middle" font-family="Newsreader" font-size="120" fill="#fff" opacity=".18">?</text><text x="150" y="88" text-anchor="middle" font-family="Newsreader" font-size="21" fill="#fff">What must a graduate</text><text x="150" y="116" text-anchor="middle" font-family="Newsreader" font-size="21" fill="#fff">be able to do</text><text x="150" y="144" text-anchor="middle" font-family="Newsreader" font-size="21" font-style="italic" fill="#fff">without AI?</text></svg>
+      <figcaption class="cap"><span class="pn">08</span> The question we are left with. On purpose, it has more than one good answer.</figcaption></figure>
+  </div>
+</div>
+
+<div class="col">
+  <h2 id="not"><span class="n">BOUNDARIES</span>What this synthesis does not do</h2>
+  <p>It does not recommend a curriculum change, predict when general AI arrives, or attribute causes to trends that were only measured as correlations. It does not replace the discussion it was written for: it is the raw material. Every open question above can get an owner and a way to check it, through data to collect, a small pilot, or a conversation with people already working there. The decision comes after the check, not before.</p>
+
+  <h2 id="talk"><span class="n">THE TALK</span>The slides (in Hebrew)</h2>
+  <p>The full 82-slide talk this synthesis was drawn from, including the deep-dive sections. It is shared with the people who took part in the discussion; enter the access code you received to open it. Use the button in the corner, or press F, for full screen.</p>
+  <div class="talk"><iframe src="/job-hunt-ctf/talk/" title="Strategic discussion slides (Hebrew)" allow="fullscreen" allowfullscreen loading="lazy"></iframe></div>
+  <p class="small">Trainee photos, speaker notes and the live game were removed from this version.</p>
+
+  <h2 id="refs"><span class="n">SOURCES</span>Selected references</h2>
+  <ul class="refs">
+    <li>Brynjolfsson, E., Chandar, B., &amp; Chen, R. (2025). Canaries in the coal mine? Stanford Digital Economy Lab.</li>
+    <li>METR (2026). Time Horizon 1.1. AI Impacts (2016, 2022); Grace et al. (2024), arXiv 2401.02843.</li>
+    <li>Stanford HAI (2025). AI Index Report. Epoch AI, LLM inference price trends.</li>
+    <li>Indeed Hiring Lab (May 2026); FrogHire AI Readiness Report (2026); Carta, Solo Founders Report (2025); Stack Overflow Developer Survey (2025).</li>
+    <li>Kestin, G., et al. (2025). AI tutoring outperforms in-class active learning. Scientific Reports.</li>
+    <li>De Simone, M., et al. (2025). World Bank Policy Research Working Paper 11125.</li>
+    <li>Bastani, H., et al. (2025). Generative AI without guardrails can harm learning. PNAS 122(26).</li>
+    <li>Oreopoulos, P., &amp; Low, C. (2026). NBER Working Paper 35620. Shen, J., &amp; Tamkin, A. (2026), Anthropic, preprint.</li>
+    <li>Google DeepMind (GNoME; IMO 2025); Georgiev, Tao et al. (2025), arXiv 2511.02864; NobelPrize.org (2024).</li>
+    <li>UNESCO GEM Report (2026); University of Sydney; Government Offices of Sweden.</li>
+    <li>OECD (2026). Education at a Glance 2026, as reported by <a href="https://www.ynetnews.com/business/article/hk7b4s9qme" rel="noopener">Ynetnews</a>.</li>
+    <li>Harari, Y. N. (17 Oct 2026). Interview, <a href="https://www.ceskatelevize.cz/porady/10441294653-hyde-park-civilizace/9271-english-versions/47309/" rel="noopener">Hyde Park Civilizace, Česká televize</a>.</li>
+  </ul>
+</div>
+</main>
+<footer><div class="col">Aviram Weisberg · Synthesis, November 2026 · <a href="/lab/">More perspectives</a></div></footer>
+</body>
+</html>
