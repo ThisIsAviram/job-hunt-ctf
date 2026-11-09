@@ -119,8 +119,8 @@ td.src a,figcaption a{color:inherit;text-decoration:underline;text-decoration-co
 .map-note{font-size:14px;color:var(--mute);margin:12px 0 0}
 
 /* side toc */
-.syn-toc{position:fixed;left:24px;top:100px;width:176px;font-size:13px;display:none;z-index:5;max-height:calc(100vh - 130px);overflow:auto}
-.syn-toc a{display:block;color:var(--mute);text-decoration:none;padding:6px 0 6px 14px;border-left:2px solid var(--line);line-height:1.35;transition:color .2s,border-color .2s}.syn-toc a:hover{color:var(--ink)}
+.syn-toc{position:fixed;left:24px;top:96px;width:176px;font-size:13px;display:none;z-index:5;max-height:calc(100vh - 120px);overflow:auto;transition:top .45s cubic-bezier(.2,.7,.2,1);scrollbar-width:thin}
+.syn-toc a{display:block;color:var(--mute);text-decoration:none;padding:5px 0 5px 14px;border-left:2px solid var(--line);line-height:1.35;transition:color .2s,border-color .2s}.syn-toc a:hover{color:var(--ink)}
 .syn-toc a b{font:500 11px var(--mono);color:var(--ember);margin-right:6px}.syn-toc a.on{color:var(--ink);border-left-color:var(--ember);font-weight:500}
 .syn-toc .tk{font:500 11px var(--mono);letter-spacing:.08em;color:var(--mute);margin:0 0 8px 14px}
 @media (min-width:1180px){.syn-toc{display:block}main,.foot{padding-left:200px}}
@@ -833,6 +833,12 @@ figure.viz figcaption b{color:var(--ink);font-weight:600}
     map.forEach((a, id) => { const el = document.getElementById(id); if (el) so.observe(el); });
   } else document.querySelectorAll(".rv").forEach(el => el.classList.add("in"));
 
+
+  /* keep the side TOC clear of the site's sticky header (it hides on scroll down and returns on scroll up) */
+  (() => { const toc = document.querySelector(".syn-toc"), hd = document.querySelector("header.top"); if (!toc || !hd) return;
+    const place = () => { const r = hd.getBoundingClientRect(), bottom = Math.max(0, r.bottom), t = Math.max(24, bottom + 24);
+      toc.style.top = t + "px"; toc.style.maxHeight = (innerHeight - t - 24) + "px"; };
+    addEventListener("scroll", place, { passive: true }); addEventListener("resize", place); hd.addEventListener("transitionend", place); place(); setInterval(place, 400); })();
   /* audio version */
   (() => {
     const au = document.getElementById("lp-audio"), b = document.getElementById("lp-btn"), fill = document.getElementById("lp-fill"), bar = document.getElementById("lp-bar"),
