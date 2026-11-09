@@ -43,7 +43,7 @@ h1 em{font-style:italic;color:var(--ember)}
 /* page map */
 .map{margin:56px auto 10px}
 .map-h{font:500 12px var(--mono);letter-spacing:.08em;color:var(--ember);margin:0 0 14px}
-.flow{display:grid;grid-template-columns:repeat(7,1fr);gap:0;counter-reset:f}
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0;counter-reset:f}
 .flow a{position:relative;display:block;padding:14px 14px 16px;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);margin-left:-1px;transition:background .2s,transform .2s}
 .flow a:first-child{border-radius:12px 0 0 12px;margin-left:0}.flow a:last-child{border-radius:0 12px 12px 0;background:var(--ink);color:#fff;border-color:var(--ink)}
 .flow a:hover{background:var(--ember-soft);transform:translateY(-2px)}.flow a:last-child:hover{background:var(--ember);border-color:var(--ember)}
@@ -173,6 +173,13 @@ figure.viz figcaption b{color:var(--ink);font-weight:600}
 .talk{margin:22px 0 0;border:1px solid var(--line-2);border-radius:16px;overflow:hidden;background:var(--navy);aspect-ratio:16/9}
 .talk iframe{width:100%;height:100%;border:0;display:block}
 .small{font-size:14px;color:var(--mute)}
+.harari{display:grid;grid-template-columns:240px 1fr;gap:26px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:22px 0}
+.h-img img{width:100%;height:auto;border:2px solid var(--ink);border-radius:6px;box-shadow:4px 4px 0 var(--ink);display:block}
+.harari p{font-size:15.5px;color:var(--ink-2)}
+.h-links{display:flex;flex-wrap:wrap;gap:10px;margin:6px 0 14px}
+.btn-l{display:inline-block;font:500 14.5px var(--sans);text-decoration:none;padding:10px 16px;border-radius:99px;background:var(--ink);color:#fff}.btn-l:hover{background:var(--ember);color:#fff}
+.btn-l.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}.btn-l.ghost:hover{border-color:var(--ink);color:var(--ink);background:transparent}
+@media (max-width:900px){.harari{grid-template-columns:1fr}.h-img{max-width:280px}}
 .org{display:grid;grid-template-columns:200px 1fr;gap:28px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;margin:24px 0}
 .org img{width:100%;height:auto}
 .org p{margin:0 0 10px;font-size:15.5px;color:var(--ink-2)}.org p:last-child{margin:0}
@@ -186,7 +193,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 .rv{opacity:0;transform:translateY(14px);transition:opacity .7s ease,transform .7s ease}.rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}*{transition:none!important}}
-@media (max-width:980px){.flow{grid-template-columns:repeat(4,1fr);row-gap:10px}.flow a,.flow a:first-child,.flow a:last-child{border-radius:12px;margin-left:0}.flow a::after{display:none}.flow{gap:10px}}
+@media (max-width:980px){.flow{grid-template-columns:repeat(3,1fr);row-gap:10px}.flow a,.flow a:first-child,.flow a:last-child{border-radius:12px;margin-left:0}.flow a::after{display:none}.flow{gap:10px}}
 @media (max-width:900px){.axes,.qgrid,.answers,.kit{grid-template-columns:1fr}.comic{grid-template-columns:repeat(2,1fr)}.nav{gap:16px}.signals td.src{display:none}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}.game-grid{grid-template-columns:repeat(2,1fr)}.org{grid-template-columns:1fr}.org img{max-width:220px}.refs{columns:1}.layer{flex-direction:column;align-items:flex-start;gap:6px}}
 @media (max-width:520px){.comic{grid-template-columns:1fr}.nav a:not(.nav-cta){display:none}.flow{grid-template-columns:repeat(2,1fr)}.credit{flex-direction:column;align-items:flex-start}.game{padding:24px}}
 @media print{.top,.toc,.totop,.game .btns,.game-frame,.talk,.progress{display:none!important}body{background:#fff;font-size:12pt}.rv{opacity:1;transform:none}figure.viz,.ans,.qcard,.panel{break-inside:avoid}a{color:inherit}}
@@ -200,7 +207,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 
 <nav class="toc" aria-label="On this page">
   <div class="tk">ON THIS PAGE</div>
-  <a href="#map">The map</a><a href="#axis1">Professions</a><a href="#axis2">Pace and radius</a><a href="#axis3">Meaningful skills</a><a href="#israel">The Israeli lens</a><a href="#windows">Discussion windows</a><a href="#framings">Three framings</a><a href="#meet">Where it meets</a><a href="#comic">The comic</a><a href="#play">Play it yourself</a><a href="#kit">Run the conversation</a><a href="#about">About this work</a><a href="#refs">Sources</a>
+  <a href="#map">The map</a><a href="#axis1">Professions</a><a href="#axis2">Pace and radius</a><a href="#axis3">Meaningful skills</a><a href="#israel">The Israeli lens</a><a href="#windows">Discussion windows</a><a href="#framings">Three framings</a><a href="#meet">Where it meets</a><a href="#comic">The comic</a><a href="#play">Play it yourself</a><a href="#harari">Addendum: Harari</a><a href="#about">About this work</a><a href="#refs">Sources</a>
 </nav>
 
 <main id="main">
@@ -226,8 +233,7 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
     <a href="#israel"><span class="fk">03</span><span class="ft">Israeli lens</span><span class="fs">What the system decided</span></a>
     <a href="#windows"><span class="fk">04</span><span class="ft">Windows</span><span class="fs">What the room argued</span></a>
     <a href="#framings"><span class="fk">05</span><span class="ft">Framings</span><span class="fs">Three ways to ask it</span></a>
-    <a href="#kit"><span class="fk">06</span><span class="ft">Questions</span><span class="fs">Owner, check, decision</span></a>
-    <a href="#play"><span class="fk">07</span><span class="ft">Try it</span><span class="fs">A 12-minute game</span></a>
+    <a href="#play"><span class="fk">06</span><span class="ft">Try it</span><span class="fs">A 12-minute game</span></a>
   </div>
   <p class="map-note">Each layer narrows the one before it. Read in order, or jump to the layer you need. Every number here is a snapshot, and forecasts in this field have been wrong, systematically, in both directions.</p>
 </div>
@@ -592,19 +598,26 @@ footer .col{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
 </div></div></section>
 
 <section class="chapter"><div class="col">
-  <h2 id="kit"><span class="n">RUN THE CONVERSATION</span>From a question to a check</h2>
-  <p class="lead2">This page is raw material for a discussion, not a substitute for one. The structure that worked in the room is simple enough to reuse.</p>
-  <div class="kit">
-    <div class="step rv"><b>STEP 1 · FEEL IT</b><h4>Start with the game</h4><p>Twelve minutes on the job board give everyone the same concrete reference before anyone argues about the future.</p></div>
-    <div class="step rv"><b>STEP 2 · PICK A WINDOW</b><h4>Choose one tension</h4><p>Take one discussion window or one framing. Hold both positions on purpose before anyone takes a side.</p></div>
-    <div class="step rv"><b>STEP 3 · OWN THE CHECK</b><h4>Give it an owner</h4><p>Every open question gets an owner and a way to check it: data to collect, a small pilot, or a conversation with people already doing it. The decision comes after the check.</p></div>
-  </div>
-  <div class="not"><b>What this synthesis does not do.</b> It does not recommend a curriculum change, predict when general AI arrives, or attribute causes to trends that were only measured as correlations.</div>
-
   <h2 id="talk"><span class="n">THE TALK</span>The slides (in Hebrew)</h2>
   <p>The full talk this synthesis was drawn from, including the deep-dive sections. It is shared with the people who took part in the discussion; enter the access code you received to open it. Use the button in the corner, or press F, for full screen.</p>
   <div class="talk"><iframe src="/job-hunt-ctf/talk/" title="Strategic discussion slides (Hebrew)" allow="fullscreen" allowfullscreen loading="lazy"></iframe></div>
   <p class="small">Trainee photos, speaker notes and the live game were removed from this version.</p>
+
+
+  <h2 id="harari"><span class="n">ADDENDUM</span>Yuval Noah Harari on the cows and the market</h2>
+  <div class="harari">
+    <div class="h-img"><img src="comic/panel-05.webp" width="900" height="660" loading="lazy" alt="A cow looks at the farmer by the fence but not at the market screen high above them"></div>
+    <div>
+      <p>In October 2026 the historian Yuval Noah Harari gave a long interview to <i>Hyde Park Civilizace</i>, the science and ideas programme of Czech public television (Česká televize), with an English version. One image from it was used in the talk and in comic panel 05.</p>
+      <p>Cows, he said, can see the farmer, but not the market that decides what happens to them. His worry is that humans may come to live in the same position: inside financial, legal and bureaucratic systems increasingly built and run by AI, which we can observe but no longer understand.</p>
+      <p>It is included here as a lens, not as evidence or a forecast. It sharpens one of the open questions on Axis 2: who is responsible for understanding systems nobody fully built?</p>
+      <div class="h-links">
+        <a class="btn-l" href="https://player.ceskatelevize.cz/?autoStart=true&amp;origin=iVysilani&amp;usePlayability=true&amp;useNewPlaylist=true&amp;bonus=47309&amp;channelID=3&amp;startTime=52" target="_blank" rel="noopener">▶ Watch from 0:52, where the cow image begins ↗</a>
+        <a class="btn-l ghost" href="https://www.ceskatelevize.cz/porady/10441294653-hyde-park-civilizace/9271-english-versions/47309/" target="_blank" rel="noopener">The full programme page ↗</a>
+      </div>
+      <p class="small">Česká televize, Hyde Park Civilizace, English versions, 17 October 2026. The player does not allow embedding, so it opens in a new tab.</p>
+    </div>
+  </div>
 
   <h2 id="about"><span class="n">ABOUT THIS WORK</span>Where it was made</h2>
   <div class="org">
